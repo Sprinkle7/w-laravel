@@ -25,10 +25,8 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
     public function import(Request $request)
     {
-        
         // Validate the uploaded file
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:csv,txt|max:2048', // Max size 2MB, adjust if necessary
@@ -110,11 +108,7 @@ class CompanyController extends Controller
 
         fclose($handle);
 
-        if ($request->expectsJson()) {
-            return response()->json(['message' => 'File processed successfully']);
-        } else {
-            return redirect()->back()->with('status', 'File processed successfully');
-        }
+        return response()->json(['message' => 'Companies imported successfully, with updates where necessary'], 200);
     }
     
     public function store(Request $request)
