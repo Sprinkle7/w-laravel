@@ -13,11 +13,93 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index(Request $request)
+    // {
+    //     // Fetch companies with pagination (adjust the page size as needed)
+    //     $companies = Company::paginate(100);
+    //     return view('companies', compact('companies'));
+    // }
+
     public function index(Request $request)
     {
-        // Fetch companies with pagination (adjust the page size as needed)
-        $companies = Company::paginate(10);
-        return view('companies', compact('companies'));
+        try {
+            $query = Company::query();
+    
+            // Apply search filtering
+            if ($search = $request->input('search')['value'] ?? null) {
+                $query->where('firmenname', 'like', "%{$search}%")
+                    ->orWhere('vorname', 'like', "%{$search}%")
+                    ->orWhere('nachname', 'like', "%{$search}%")
+                    ->orWhere('jobtitel', 'like', "%{$search}%")
+                    ->orWhere('webseite', 'like', "%{$search}%");
+            }
+    
+            // Define database columns only for ordering
+            $columns = [
+                'id', 'vorname', 'firmen_id', 'firmenname', 'jobtitel', 'webseite'
+            ];
+            $orderColumnIndex = $request->input('order.0.column');
+            $orderDir = $request->input('order.0.dir', 'asc');
+            if (isset($columns[$orderColumnIndex])) {
+                $query->orderBy($columns[$orderColumnIndex], $orderDir);
+            }
+    
+            // Pagination parameters
+            $start = $request->input('start', 0);
+            $length = $request->input('length', 10);
+            $query->skip($start)->take($length);
+    
+            // Execute query and get paginated results
+            $companies = $query->get();
+    
+            // Format data for DataTables
+            $formattedData = $companies->map(function ($company) {
+                return [
+                    'checkbox' => '<input type="checkbox" class="form-checkbox">',
+                    'id' => "<span class='px-4 py-3 text-sm text-gray-900'>{$company->id}</span>",
+                    'name' => "<span class='px-4 py-3 text-sm text-gray-900'>{$company->anrede} {$company->vorname} {$company->nachname}</span>",
+                    'firmen_id' => "<span class='px-4 py-3 text-sm text-gray-900 uppercase'>{$company->firmen_id}</span>",
+                    'firmenname' => "<a href='{$company->webseite}' target='_blank' class='px-4 py-3 text-sm text-red-600'>{$company->firmenname}</a>",
+                    'jobtitel' => "<span class='px-4 py-3 text-sm text-gray-900'>{$company->jobtitel}</span>",
+                    'webseite' => "<span class='px-4 py-3 text-sm text-gray-900'>{$company->webseite}</span>",
+                    'actions' => ' <button class="text-gray-600 hover:text-gray-800">
+                                <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.49996 12.6667H4.44996L10.9666 6.15L10.0166 5.2L3.49996 11.7167V12.6667ZM2.16663 14V11.1667L10.9666 2.38333C11.1 2.26111 11.2472 2.16667 11.4083 2.1C11.5694 2.03333 11.7388 2 11.9166 2C12.0944 2 12.2666 2.03333 12.4333 2.1C12.6 2.16667 12.7444 2.26667 12.8666 2.4L13.7833 3.33333C13.9166 3.45556 14.0139 3.6 14.075 3.76667C14.1361 3.93333 14.1666 4.1 14.1666 4.26667C14.1666 4.44444 14.1361 4.61389 14.075 4.775C14.0139 4.93611 13.9166 5.08333 13.7833 5.21667L4.99996 14H2.16663ZM10.4833 5.68333L10.0166 5.2L10.9666 6.15L10.4833 5.68333Z" fill="#1D1B20"/>
+                                </svg>
+
+                            </button>
+                            <button class="text-gray-600 hover:text-gray-800">
+                                <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.83325 14C4.46659 14 4.1527 13.8694 3.89159 13.6083C3.63047 13.3472 3.49992 13.0333 3.49992 12.6667V4H2.83325V2.66667H6.16659V2H10.1666V2.66667H13.4999V4H12.8333V12.6667C12.8333 13.0333 12.7027 13.3472 12.4416 13.6083C12.1805 13.8694 11.8666 14 11.4999 14H4.83325ZM11.4999 4H4.83325V12.6667H11.4999V4ZM6.16659 11.3333H7.49992V5.33333H6.16659V11.3333ZM8.83325 11.3333H10.1666V5.33333H8.83325V11.3333Z" fill="#1D1B20"/>
+                                </svg>
+                            </button>
+                            <button class="view-company-btn text-gray-600 hover:text-gray-800" data-id="' . $company->id . '">
+                                <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_319_1195)">
+                                <path d="M1.5 8.00033C1.5 8.00033 4.16667 2.66699 8.83333 2.66699C13.5 2.66699 16.1667 8.00033 16.1667 8.00033C16.1667 8.00033 13.5 13.3337 8.83333 13.3337C4.16667 13.3337 1.5 8.00033 1.5 8.00033Z" stroke="#1E1E1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8.83333 10.0003C9.9379 10.0003 10.8333 9.1049 10.8333 8.00033C10.8333 6.89576 9.9379 6.00033 8.83333 6.00033C7.72876 6.00033 6.83333 6.89576 6.83333 8.00033C6.83333 9.1049 7.72876 10.0003 8.83333 10.0003Z" stroke="#1E1E1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <defs>
+                                <clipPath id="clip0_319_1195">
+                                <rect width="16" height="16" fill="white" transform="translate(0.833496)"/>
+                                </clipPath>
+                                </defs>
+                                </svg>
+                            </button>
+                            '
+                ];
+            });
+    
+            return response()->json([
+                'draw' => $request->input('draw'),
+                'recordsTotal' => Company::count(),
+                'recordsFiltered' => $query->count(),
+                'data' => $formattedData
+            ]);
+    
+        } catch (\Exception $e) {
+            return response()->json([$e->getMessage()], 500);
+        }
     }
 
     /**

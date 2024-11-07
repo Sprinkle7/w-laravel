@@ -31,8 +31,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
-    Route::get('/companies', [CompanyController::class, 'index'])->name('companies');
+    // Route::get('/companies', [CompanyController::class, 'index'])->name('companies');
     Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
+    Route::get('/get_companies', [CompanyController::class, 'index'])->name('companies.index');
+    Route::get('/companies/{id}/edit', [CompanyController::class, 'edit'])->name('companies.edit');
 
 });
 

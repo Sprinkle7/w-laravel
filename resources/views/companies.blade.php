@@ -5,6 +5,16 @@
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 <style>
+    th{
+        text-align: left !important;
+    }
+    td a{
+        padding: 0 !important;
+    }
+    td {
+        text-align: left;
+        padding-left: 0px !important;
+    }
     /* Modal overlay and content styling */
     #modalOverlay {
         display: none; /* Force it to be hidden initially */
@@ -17,7 +27,6 @@
         justify-content: center;
         padding: 20px; /* Padding for small screens */
     }
-
     #modalContent {
         background-color: white;
         width: 100%;
@@ -77,6 +86,16 @@
 
 .col-span-1 {
     grid-column: span 1;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    display: flex !important;
+    visibility: visible !important;
+}
+
+.dataTables_paginate .paginate_button {
+    display: inline-block !important;
+    visibility: visible !important;
 }
 
 .col-span-2 {
@@ -230,13 +249,53 @@
                     <!-- Row 8: Telefonnummer, Telefonnummer (Firma) -->
                     <div class="col-span-2">
                         <label class="block text-gray-700">Telefonnummer</label>
-                        <input type="text" name="telefon" class="w-full border border-gray-300 p-2 rounded">
+                        <input type="text" name="telefonnummer" class="w-full border border-gray-300 p-2 rounded">
                     </div>
                     <div class="col-span-2">
                         <label class="block text-gray-700">Telefonnummer (Firma)</label>
-                        <input type="text" name="telefon_firma" class="w-full border border-gray-300 p-2 rounded">
+                        <input type="text" name="telefonnummer_firma" class="w-full border border-gray-300 p-2 rounded">
                     </div>
 
+                    <div class="col-span-2">
+                        <label class="block text-gray-700">E-Mail-Adresse (Firma)</label>
+                        <input type="text" name="email_adresse_firma" class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-gray-700">LinkedIn Account (Firma)</label>
+                        <input type="text" name="linkedin_account_firma" class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-gray-700">NACE-Code (Ebene 1)</label>
+                        <input type="text" name="nace_code_ebene_1" class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-gray-700">NACE-Code (Ebene 2)</label>
+                        <input type="text" name="nace_code_ebene_2" class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-gray-700">Beschreibung NACE-Code (Ebene 2)</label>
+                        <input type="text" name="beschreibung_nace_code_ebene_2" class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-gray-700">WZ-Code</label>
+                        <input type="text" name="wz_code" class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-gray-700">Beschreibung WZ-Code</label>
+                        <input type="text" name="beschreibung_wz_code" class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-gray-700">Branche (Hauptkategorie)</label>
+                        <input type="text" name="branche_hauptkategorie" class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-gray-700">Branche (Unterkategorie)</label>
+                        <input type="text" name="branche_unterkategorie" class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div class="col-span-2"></div>
                     <!-- Row 9: Action Buttons (Aligned Right) -->
                     <div class="col-span-2 mt-6 ">
                         <button type="button" onclick="closeModal()" class="px-4 py-2 w-full bg-gray-200 text-gray-700 rounded">Abbrechen</button>
@@ -266,33 +325,6 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($companies as $company)
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="px-4 py-3"><input type="checkbox" class="form-checkbox"></td>
-                        <td class="px-4 py-3 text-sm text-gray-900">{{ $company->id }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-900">{{ $company->anrede }} {{ $company->vorname }} {{ $company->nachname }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-900 uppercase">{{ $company->firmen_id }}</td>
-                        <td class="px-4 py-3 text-sm text-red-600">
-                            <a href="{{ $company->webseite }}" target="_blank">{{ $company->firmenname }}</a>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-900">{{ $company->jobtitel }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-900">{{ $company->webseite }}</td>
-                        <td class="px-4 py-3 text-sm">
-                            <!-- Action icons here (edit, delete) -->
-                            <button class="text-gray-600 hover:text-gray-800">
-                                <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3.49996 12.6667H4.44996L10.9666 6.15L10.0166 5.2L3.49996 11.7167V12.6667ZM2.16663 14V11.1667L10.9666 2.38333C11.1 2.26111 11.2472 2.16667 11.4083 2.1C11.5694 2.03333 11.7388 2 11.9166 2C12.0944 2 12.2666 2.03333 12.4333 2.1C12.6 2.16667 12.7444 2.26667 12.8666 2.4L13.7833 3.33333C13.9166 3.45556 14.0139 3.6 14.075 3.76667C14.1361 3.93333 14.1666 4.1 14.1666 4.26667C14.1666 4.44444 14.1361 4.61389 14.075 4.775C14.0139 4.93611 13.9166 5.08333 13.7833 5.21667L4.99996 14H2.16663ZM10.4833 5.68333L10.0166 5.2L10.9666 6.15L10.4833 5.68333Z" fill="#1D1B20"/>
-                                </svg>
-
-                            </button>
-                            <button class="text-gray-600 hover:text-gray-800 ml-2">
-                                <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4.83325 14C4.46659 14 4.1527 13.8694 3.89159 13.6083C3.63047 13.3472 3.49992 13.0333 3.49992 12.6667V4H2.83325V2.66667H6.16659V2H10.1666V2.66667H13.4999V4H12.8333V12.6667C12.8333 13.0333 12.7027 13.3472 12.4416 13.6083C12.1805 13.8694 11.8666 14 11.4999 14H4.83325ZM11.4999 4H4.83325V12.6667H11.4999V4ZM6.16659 11.3333H7.49992V5.33333H6.16659V11.3333ZM8.83325 11.3333H10.1666V5.33333H8.83325V11.3333Z" fill="#1D1B20"/>
-                                </svg>
-                            </button>
-                        </td>
-                    </tr>
-                @endforeach
             </tbody>
         </table>
     </div>
@@ -300,26 +332,129 @@
 @endsection
 
 <script>
+    // $(document).ready(function() {
+    //     $('#companiesTable').DataTable({
+    //         "pageLength": 10,
+    //         "lengthMenu": [10, 25, 50, 100],
+    //         "language": {
+    //             "search": "Hier suchen:",
+    //             "lengthMenu": "Anzeigen _MENU_ Einträge",
+    //             "paginate": {
+    //                 "first": "Erste",
+    //                 "last": "Letzte",
+    //                 "next": "Nächster",
+    //                 "previous": "Vorherige"
+    //             }
+    //         },
+    //         "columnDefs": [
+    //             { "orderable": false, "targets": 0 },
+    //             { "orderable": false, "targets": -1 }
+    //         ]
+    //     });
+    // });
     $(document).ready(function() {
         $('#companiesTable').DataTable({
-            "pageLength": 10,
-            "lengthMenu": [10, 25, 50, 100],
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "{{ route('companies.index') }}",
+                "type": "GET"
+            },
+            "columns": [
+                { "data": "checkbox", "orderable": false },
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "firmen_id" },
+                { "data": "firmenname" },
+                { "data": "jobtitel" },
+                { "data": "webseite" },
+                { "data": "actions", "orderable": false }
+            ],
+            "paging": true,           // Enable pagination
+            "ordering": true,         // Enable ordering
+            "info": true,             // Show table info
+            "searching": true,        // Enable search functionality
+            "order": [[1, 'asc']],    // Order by an existing column by default
+            "lengthMenu": [12, 24, 30, 40, 50, 60, 80, 100], // Optional: control the page length
+            "pagingType": "full_numbers",
             "language": {
-                "search": "Hier suchen:",
-                "lengthMenu": "Anzeigen _MENU_ Einträge",
+                "decimal": ",",
+                "thousands": ".",
+                "lengthMenu": "Zeige _MENU_ Einträge",
+                "zeroRecords": "Keine passenden Einträge gefunden",
+                "info": "Zeige Eintrag _START_ bis _END_ von _TOTAL_ Einträgen",
+                "infoEmpty": "Keine Einträge verfügbar",
+                "infoFiltered": "(gefiltert von _MAX_ Einträgen insgesamt)",
+                "search": "Suche:",
                 "paginate": {
                     "first": "Erste",
                     "last": "Letzte",
-                    "next": "Nächster",
+                    "next": "Nächste",
                     "previous": "Vorherige"
                 }
-            },
-            "columnDefs": [
-                { "orderable": false, "targets": 0 },
-                { "orderable": false, "targets": -1 }
-            ]
+            }
+        });
+        $('#companiesTable').on('click', '.view-company-btn', function () {
+            const companyId = $(this).data('id'); // Get the company ID from data attribute
+
+            // AJAX request to fetch company details
+            $.ajax({
+                url: `/companies/${companyId}/edit`,
+                type: 'GET',
+                success: function (data) {
+                    // Populate modal fields with the received data
+                    $('input[name="id"]').val(data.id);
+                    $('input[name="anrede"]').val(data.anrede);
+                    $('input[name="vorname"]').val(data.vorname);
+                    $('input[name="nachname"]').val(data.nachname);
+                    $('input[name="firmen_id"]').val(data.firmen_id);
+                    $('input[name="firmenname"]').val(data.firmenname);
+                    $('input[name="jobtitel"]').val(data.jobtitel);
+                    $('input[name="email"]').val(data.email_adresse);
+                    $('input[name="strasse"]').val(data.strasse);
+                    $('input[name="hausnummer"]').val(data.hausnummer);
+                    $('input[name="plz"]').val(data.plz);
+                    $('input[name="ort"]').val(data.ort);
+                    $('input[name="land"]').val(data.land);
+                    $('input[name="telefonnummer"]').val(data.telefonnummer);
+                    $('input[name="telefonnummer_firma"]').val(data.telefonnummer_firma);
+                    $('input[name="beschreibung_nace_code_ebene_2"]').val(data.beschreibung_nace_code_ebene_2);
+                    $('input[name="email_adresse_firma"]').val(data.email_adresse_firma);
+                    $('input[name="linkedin_account_firma"]').val(data.linkedin_account_firma);
+                    $('input[name="nace_code_ebene_1"]').val(data.nace_code_ebene_1);
+                    $('input[name="nace_code_ebene_2"]').val(data.nace_code_ebene_2);
+                    $('input[name="wz_code"]').val(data.wz_code);
+                    $('input[name="beschreibung_wz_code"]').val(data.beschreibung_wz_code);
+                    $('input[name="branche_hauptkategorie"]').val(data.branche_hauptkategorie);
+                    $('input[name="branche_unterkategorie"]').val(data.branche_unterkategorie);
+
+                    // Show the modal
+                    openModal();
+                },
+                error: function (xhr) {
+                    alert('An error occurred while fetching the data.'); // Error handling
+                }
+            });
         });
     });
+
+    // function submitForm() {
+    //     const companyId = $('input[name="id"]').val();
+
+    //     $.ajax({
+    //         url: companyId ? `/companies/${companyId}` : '/companies',
+    //         type: companyId ? 'PUT' : 'POST',
+    //         data: $('#companyForm').serialize(),
+    //         success: function (response) {
+    //             closeModal();
+    //             table.ajax.reload(); // Reload the DataTable to reflect changes
+    //             alert('Company updated successfully');
+    //         },
+    //         error: function (xhr) {
+    //             alert('An error occurred while saving the data.');
+    //         }
+    //     });
+    // }
 
     function openModal() {
         // Directly set display to 'flex' to make modal visible
