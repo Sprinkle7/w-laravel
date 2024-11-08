@@ -531,6 +531,12 @@ video {
 .mt-8{
   margin-top: 2rem;
 }
+.mt-10{
+  margin-top: 8rem !important;
+}
+.top-7 {
+  top: 7%;
+}
 .block{
   display: block;
 }
@@ -804,6 +810,10 @@ video {
 .px-6{
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+.px-7{
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 .py-1{
   padding-top: 0.25rem;
@@ -1251,3 +1261,27 @@ video {
   }
 }
 
+.login{
+  height: 70vh;
+  width: 70%;
+}
+
+.login-heading{
+  font-size: 26px;
+  margin-top: 1em;
+}
+
+.heading{
+  font-size: 26px;
+}
+
+.show-eye,
+.hide-eye {
+  position: absolute;
+  top: 55%;
+  right: 3%;
+}
+
+.hide-eye{
+  display: none;
+}

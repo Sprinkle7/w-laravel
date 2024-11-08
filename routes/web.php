@@ -27,7 +27,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/companies', function () {
         return view('companies');
     })->name('companies');
-
+    
+    Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('companies.destroy');
+    Route::put('/companies/{id}', [CompanyController::class, 'update'])->name('companies.update');
+    
     Route::resource('users', UserController::class)->except(['show']);
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.update');

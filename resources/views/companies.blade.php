@@ -5,6 +5,10 @@
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 <style>
+    .dataTables_wrapper {
+        font-family: 'rajdhani', sans-serif; /* Replace 'YourCustomFont' with your preferred font */
+    }
+
     th{
         text-align: left !important;
     }
@@ -44,12 +48,12 @@
 }
 
 #modalContent::-webkit-scrollbar-thumb {
-    background-color: red; /* Red color for the scrollbar thumb */
+    background-color: #be1622; /* #be1622 color for the scrollbar thumb */
     border-radius: 10px; /* Optional: round the corners */
 }
 
 #modalContent::-webkit-scrollbar-thumb:hover {
-    background-color: darkred; /* Darker red on hover */
+    background-color: #be1622; /* Darker red on hover */
 }
 
 .close-button {
@@ -57,8 +61,8 @@
     top: 16px; /* Adjust position as needed */
     right: 16px; /* Adjust position as needed */
     background-color: transparent; /* Transparent background */
-    color: red; /* Red color for the "X" icon */
-    border: 2px solid red; /* Red border */
+    color: #be1622; /* #be1622 color for the "X" icon */
+    border: 2px solid #be1622; /* #be1622 border */
     border-radius: 50%; /* Make it circular */
     width: 32px; /* Width of the button */
     height: 32px; /* Height of the button */
@@ -68,6 +72,10 @@
     cursor: pointer;
 }
 
+table.dataTable thead th, table.dataTable thead td {
+    padding:10px 0 !important;
+}
+
 .close-button:hover {
     background-color: rgba(255, 0, 0, 0.1); /* Light red background on hover */
 }
@@ -75,7 +83,7 @@
 /* For Firefox */
 #modalContent {
     scrollbar-width: thin; /* Set width to thin */
-    scrollbar-color: red transparent; /* Red thumb with a transparent track */
+    scrollbar-color: #be1622 transparent; /* Red thumb with a transparent track */
 }
 
     .grid {
@@ -142,6 +150,38 @@
 .text-white {
     color: #fff;
 }
+#companiesTable_length, #companiesTable_paginate{
+    margin-top: 1em;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0.5em !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+    background: white;
+    border: 2px solid #be1622;
+    border-radius: 50%;
+    font-weight: bold;
+    padding: 5px 14px !important;
+    color: #be1622 !important;
+}
+
+.message-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    z-index: 100;
+}
+
+.message-box.success {
+    background-color: #4CAF50; /* Green for success */
+}
+
+.message-box.error {
+    background-color: #F44336; /* Red for error */
+}
 
 
 </style>
@@ -151,12 +191,12 @@
     <!-- Add New Company Button -->
     <div class="flex justify-between items-center mb-6">
         <nav class="flex items-center space-x-2 text-gray-600 text-sm" aria-label="Breadcrumb">
-            <a class="hover:text-gray-900">Unternehmer</a>
+            <a class="hover:text-gray-900 font-rajdhani">Unternehmer</a>
             <span class="ml-2 mr-2"> > </span>
-            <span class="text-red-600 active">Liste der Unternehmer</span>
+            <span class="text-red-600 active font-rajdhani font-semibold">Liste der Unternehmer</span>
         </nav>
 
-        <button onclick="openModal()" class="bg-black text-white px-4 py-2 rounded flex items-center">
+        <button onclick="openModal()" class="bg-black text-white px-4 py-2 rounded flex items-center font-rajdhani font-semibold">
             <span class="mr-2">+</span> Unternehmer hinzufügen
         </button>
         
@@ -173,155 +213,163 @@
                 </button>
 
                 <!-- Modal Header -->
-                <h2 class="text-2xl font-bold mb-4">Unternehmerprofil</h2>
+                <h2 class="text-2xl font-bold mb-4 font-playfair">Unternehmerprofil</h2>
 
                 <!-- Modal Form Content -->
                 <form id="companyForm" class="grid grid-cols-4 gap-4">
                     <!-- Row 1: ID -->
                     <div class="col-span-4">
-                        <label class="block text-gray-700">ID</label>
-                        <input type="text" name="id" class="w-full border border-gray-300 p-2 rounded" readonly>
+                        <label class="block text-gray-700 font-rajdhani font-semibold">ID</label>
+                        <input type="text" name="id" class="w-full border border-gray-300 p-2 rounded font-rajdhani" readonly>
                     </div>
 
                     <!-- Row 2: Anrede, Vorname, Nachname -->
                     <div class="col-span-1">
-                        <label class="block text-gray-700">Anrede</label>
-                        <select name="anrede" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Anrede</label>
+                        <select name="anrede" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                             <option value="Herr">Herr</option>
                             <option value="Frau">Frau</option>
                         </select>
                     </div>
                     <div class="col-span-1">
-                        <label class="block text-gray-700">Vorname</label>
-                        <input type="text" name="vorname" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Vorname</label>
+                        <input type="text" name="vorname" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-gray-700">Nachname</label>
-                        <input type="text" name="nachname" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Nachname</label>
+                        <input type="text" name="nachname" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <!-- Row 3: Firmen-ID, Firmenname, Jobtitel -->
                     <div class="col-span-1">
-                        <label class="block text-gray-700">Firmen-ID</label>
-                        <input type="text" name="firmen_id" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Firmen-ID</label>
+                        <input type="text" name="firmen_id" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-gray-700">Firmenname</label>
-                        <input type="text" name="firmenname" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Firmenname</label>
+                        <input type="text" name="firmenname" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-1">
-                        <label class="block text-gray-700">Jobtitel</label>
-                        <input type="text" name="jobtitel" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Jobtitel</label>
+                        <input type="text" name="jobtitel" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <!-- Row 4: E-Mail-Adresse -->
                     <div class="col-span-4">
-                        <label class="block text-gray-700">E-Mail-Adresse</label>
-                        <input type="email" name="email" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">E-Mail-Adresse</label>
+                        <input type="email" name="email" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <!-- Row 5: Straße -->
                     <div class="col-span-4">
-                        <label class="block text-gray-700">Straße</label>
-                        <input type="text" name="strasse" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Straße</label>
+                        <input type="text" name="strasse" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <!-- Row 6: Hausnummer, PLZ -->
                     <div class="col-span-1">
-                        <label class="block text-gray-700">Hausnummer</label>
-                        <input type="text" name="hausnummer" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Hausnummer</label>
+                        <input type="text" name="hausnummer" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-1">
-                        <label class="block text-gray-700">PLZ</label>
-                        <input type="text" name="plz" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">PLZ</label>
+                        <input type="text" name="plz" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <!-- Row 7: Ort, Land -->
                     <div class="col-span-1">
-                        <label class="block text-gray-700">Ort</label>
-                        <input type="text" name="ort" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Ort</label>
+                        <input type="text" name="ort" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-1">
-                        <label class="block text-gray-700">Land</label>
-                        <input type="text" name="land" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Land</label>
+                        <input type="text" name="land" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <!-- Row 8: Telefonnummer, Telefonnummer (Firma) -->
                     <div class="col-span-2">
-                        <label class="block text-gray-700">Telefonnummer</label>
-                        <input type="text" name="telefonnummer" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Telefonnummer</label>
+                        <input type="text" name="telefonnummer" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-gray-700">Telefonnummer (Firma)</label>
-                        <input type="text" name="telefonnummer_firma" class="w-full border border-gray-300 p-2 rounded">
-                    </div>
-
-                    <div class="col-span-2">
-                        <label class="block text-gray-700">E-Mail-Adresse (Firma)</label>
-                        <input type="text" name="email_adresse_firma" class="w-full border border-gray-300 p-2 rounded">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-gray-700">LinkedIn Account (Firma)</label>
-                        <input type="text" name="linkedin_account_firma" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Telefonnummer (Firma)</label>
+                        <input type="text" name="telefonnummer_firma" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <div class="col-span-2">
-                        <label class="block text-gray-700">NACE-Code (Ebene 1)</label>
-                        <input type="text" name="nace_code_ebene_1" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">E-Mail-Adresse (Firma)</label>
+                        <input type="text" name="email_adresse_firma" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-gray-700">NACE-Code (Ebene 2)</label>
-                        <input type="text" name="nace_code_ebene_2" class="w-full border border-gray-300 p-2 rounded">
-                    </div>
-
-                    <div class="col-span-2">
-                        <label class="block text-gray-700">Beschreibung NACE-Code (Ebene 2)</label>
-                        <input type="text" name="beschreibung_nace_code_ebene_2" class="w-full border border-gray-300 p-2 rounded">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-gray-700">WZ-Code</label>
-                        <input type="text" name="wz_code" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">LinkedIn Account (Firma)</label>
+                        <input type="text" name="linkedin_account_firma" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <div class="col-span-2">
-                        <label class="block text-gray-700">Beschreibung WZ-Code</label>
-                        <input type="text" name="beschreibung_wz_code" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">NACE-Code (Ebene 1)</label>
+                        <input type="text" name="nace_code_ebene_1" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-gray-700">Branche (Hauptkategorie)</label>
-                        <input type="text" name="branche_hauptkategorie" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">NACE-Code (Ebene 2)</label>
+                        <input type="text" name="nace_code_ebene_2" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Beschreibung NACE-Code (Ebene 2)</label>
+                        <input type="text" name="beschreibung_nace_code_ebene_2" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-gray-700">Branche (Unterkategorie)</label>
-                        <input type="text" name="branche_unterkategorie" class="w-full border border-gray-300 p-2 rounded">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">WZ-Code</label>
+                        <input type="text" name="wz_code" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
+                    </div>
+                    @csrf
+                    <div class="col-span-2">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Beschreibung WZ-Code</label>
+                        <input type="text" name="beschreibung_wz_code" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Branche (Hauptkategorie)</label>
+                        <input type="text" name="branche_hauptkategorie" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Branche (Unterkategorie)</label>
+                        <input type="text" name="branche_unterkategorie" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
                     <div class="col-span-2"></div>
                     <!-- Row 9: Action Buttons (Aligned Right) -->
                     <div class="col-span-2 mt-6 ">
-                        <button type="button" onclick="closeModal()" class="px-4 py-2 w-full bg-gray-200 text-gray-700 rounded">Abbrechen</button>
+                        <button type="button" onclick="closeModal()" class="px-4 py-2 w-full bg-gray-200 text-gray-700 rounded font-rajdhani font-semibold">Abbrechen</button>
                     </div>
                     <div class="col-span-2 mt-6 flex justify-end space-x-4">
-                        <button type="button" onclick="submitForm()" class="px-4 w-full py-2 bg-black text-white rounded">Speichern</button>
+                        <button id="modalSubmitButton" type="submit" class="px-4 py-2 w-full bg-black text-white rounded font-rajdhani font-semibold">Speichern</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="bg-white overflow-x-auto p-6">
-        <table id="companiesTable" class="min-w-full leading-normal">
+    <div class="bg-white overflow-x-auto p-6">  
+        <div class="w-full py-4 mb-6">
+            <svg width="24" height="24" viewBox="0 0 24 24" class="mt-2" style="float: left;" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="24" height="24" rx="12" fill="#FFCC00"/>
+                <path d="M12 7V3H2V21H22V7H12ZM6 19H4V17H6V19ZM6 15H4V13H6V15ZM6 11H4V9H6V11ZM6 7H4V5H6V7ZM10 19H8V17H10V19ZM10 15H8V13H10V15ZM10 11H8V9H10V11ZM10 7H8V5H10V7ZM20 19H12V17H14V15H12V13H14V11H12V9H20V19ZM18 11H16V13H18V11ZM18 15H16V17H18V15Z" fill="#1E1E1E"/>
+            </svg>
+            <h2 class="ml-4 mb-4 heading font-playfair font-semibold" style="float: left;">Liste der Unternehmer</h2>
+        </div>
+            
+        <table id="companiesTable" class="min-w-full mt-4 leading-normal font-rajdhani">
             <thead>
                 <tr class="border-b">
                     <th class="text-xs font-semibold text-gray-600 uppercase">
                         <input type="checkbox" class="form-checkbox">
                     </th>
-                    <th class="text-xs font-semibold text-gray-600 uppercase">ID</th>
-                    <th class="text-xs font-semibold text-gray-600 uppercase">Unternehmer</th>
-                    <th class="text-xs font-semibold text-gray-600 uppercase">Firmen-ID</th>
-                    <th class="text-xs font-semibold text-gray-600 uppercase">Firmenname</th>
-                    <th class="text-xs font-semibold text-gray-600 uppercase">Jobtitel</th>
-                    <th class="text-xs font-semibold text-gray-600 uppercase">Webseite</th>
-                    <th class="text-xs font-semibold text-gray-600 uppercase">Aktion</th>
+                    <th class="text-sm font-semibold text-gray-600 uppercase font-rajdhani">ID</th>
+                    <th class="text-sm font-semibold text-gray-600 uppercase font-rajdhani">Unternehmer</th>
+                    <th class="text-sm font-semibold text-gray-600 uppercase font-rajdhani">Firmen-ID</th>
+                    <th class="text-sm font-semibold text-gray-600 uppercase font-rajdhani">Firmenname</th>
+                    <th class="text-sm font-semibold text-gray-600 uppercase font-rajdhani">Jobtitel</th>
+                    <th class="text-sm font-semibold text-gray-600 uppercase font-rajdhani">Webseite</th>
+                    <th class="text-sm font-semibold text-gray-600 uppercase font-rajdhani" width="80">Aktion</th>
                 </tr>
             </thead>
             <tbody>
@@ -332,28 +380,8 @@
 @endsection
 
 <script>
-    // $(document).ready(function() {
-    //     $('#companiesTable').DataTable({
-    //         "pageLength": 10,
-    //         "lengthMenu": [10, 25, 50, 100],
-    //         "language": {
-    //             "search": "Hier suchen:",
-    //             "lengthMenu": "Anzeigen _MENU_ Einträge",
-    //             "paginate": {
-    //                 "first": "Erste",
-    //                 "last": "Letzte",
-    //                 "next": "Nächster",
-    //                 "previous": "Vorherige"
-    //             }
-    //         },
-    //         "columnDefs": [
-    //             { "orderable": false, "targets": 0 },
-    //             { "orderable": false, "targets": -1 }
-    //         ]
-    //     });
-    // });
     $(document).ready(function() {
-        $('#companiesTable').DataTable({
+        const table = $('#companiesTable').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": {
@@ -370,12 +398,13 @@
                 { "data": "webseite" },
                 { "data": "actions", "orderable": false }
             ],
-            "paging": true,           // Enable pagination
-            "ordering": true,         // Enable ordering
-            "info": true,             // Show table info
-            "searching": true,        // Enable search functionality
-            "order": [[1, 'asc']],    // Order by an existing column by default
-            "lengthMenu": [12, 24, 30, 40, 50, 60, 80, 100], // Optional: control the page length
+            "dom": "<'top'f><'clear'>t<'bottom'l><'bottom'p>",
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "searching": true,
+            "order": [[1, 'asc']],
+            "lengthMenu": [10, 25, 50, 60, 80, 100],
             "pagingType": "full_numbers",
             "language": {
                 "decimal": ",",
@@ -387,13 +416,15 @@
                 "infoFiltered": "(gefiltert von _MAX_ Einträgen insgesamt)",
                 "search": "Suche:",
                 "paginate": {
-                    "first": "Erste",
-                    "last": "Letzte",
+                    "first": "&#8592;",
+                    "last": "&#8594;",
                     "next": "Nächste",
                     "previous": "Vorherige"
                 }
             }
         });
+
+
         $('#companiesTable').on('click', '.view-company-btn', function () {
             const companyId = $(this).data('id'); // Get the company ID from data attribute
 
@@ -436,25 +467,88 @@
                 }
             });
         });
+
+        $('#companiesTable').on('click', '.view-company-btn, .edit-company-btn', function () {
+            const companyId = $(this).data('id');
+            const isEdit = $(this).hasClass('edit-company-btn');
+
+            $.ajax({
+                url: `/companies/${companyId}/edit`,
+                type: 'GET',
+                success: function (data) {
+                    $('#companyForm').data('isEdit', isEdit); // Save edit mode in form data
+                    populateForm(data);
+                    openModal();
+                },
+                error: function () {
+                    showMessage('Fehler beim Abrufen der Daten', 'error');
+                }
+            });
+        });
+
+        // Save button handler
+        $('#companyForm').on('submit', function (e) {
+            e.preventDefault();
+            const isEdit = $(this).data('isEdit');
+            const companyId = $('input[name="id"]').val();
+            const url = isEdit ? `/companies/${companyId}` : '/companies';
+            const method = isEdit ? 'PUT' : 'POST';
+
+            $.ajax({
+                url: url,
+                type: method,
+                data: $(this).serialize(),
+                success: function () {
+                    closeModal();
+                    table.ajax.reload();
+                    showMessage(isEdit ? 'Erfolgreich aktualisiert' : 'Erfolgreich erstellt', 'success');
+                },
+                error: function () {
+                    showMessage('Fehler beim Speichern der Daten', 'error');
+                }
+            });
+        });
+
+        $('#companiesTable').on('click', '.delete-company-btn', function () {
+            const companyId = $(this).data('id');
+            if (confirm('Möchten Sie diesen Eintrag wirklich löschen?')) {
+                deleteCompany(companyId);
+            }
+        });
     });
 
-    // function submitForm() {
-    //     const companyId = $('input[name="id"]').val();
+    function deleteCompany(companyId) {
+        $.ajax({
+            url: `/companies/${companyId}`,
+            type: 'POST', 
+            data: {
+                _method: 'DELETE', 
+                _token: $('meta[name="csrf-token"]').attr('content') 
+            },
+            success: function(response) {
+                showMessage('Unternehmen erfolgreich gelöscht', 'success');
+                $('#companiesTable').DataTable().ajax.reload();
+            },
+            error: function(xhr) {
+                alert('Beim Löschen der Firma ist ein Fehler aufgetreten.');
+            }
+        });
+    }
 
-    //     $.ajax({
-    //         url: companyId ? `/companies/${companyId}` : '/companies',
-    //         type: companyId ? 'PUT' : 'POST',
-    //         data: $('#companyForm').serialize(),
-    //         success: function (response) {
-    //             closeModal();
-    //             table.ajax.reload(); // Reload the DataTable to reflect changes
-    //             alert('Company updated successfully');
-    //         },
-    //         error: function (xhr) {
-    //             alert('An error occurred while saving the data.');
-    //         }
-    //     });
-    // }
+    // Populate form fields with company data
+    function populateForm(data) {
+        Object.keys(data).forEach(key => {
+            $(`input[name="${key}"]`).val(data[key]);
+        });
+    }
+
+    // Display message function
+    function showMessage(message, type) {
+        const messageBox = $('<div>').text(message).addClass(`message-box ${type}`);
+        $('body').append(messageBox);
+        setTimeout(() => messageBox.fadeOut(), 3000);
+    }
+
 
     function openModal() {
         // Directly set display to 'flex' to make modal visible
