@@ -289,9 +289,9 @@
                 <h2 class="text-2xl font-bold mb-4 font-playfair">CSV-Datei hochladen</h2>
                 <form id="csvUploadForm" enctype="multipart/form-data">
                     @csrf
-                    <input type="file" name="file" accept=".csv" required class="w-full border border-gray-300 p-2 rounded mb-4" />
+                    <input type="file" name="file" accept=".csv" required class="w-full border border-gray-300 p-2 rounded mb-4 font-rajdhani font-semibold" />
                     <div id="progressContainer" style="display: none;" class="mb-4">
-                        <div id="progressBar" class="bg-green-600 h-4 rounded"></div>
+                        <div id="progressBar" class="bg-green-600 h-4 rounded font-rajdhani font-semibold"></div>
                     </div>
                     <button type="submit" class="bg-black text-white w-full py-2 rounded font-rajdhani font-semibold">Upload CSV</button>
                 </form>
