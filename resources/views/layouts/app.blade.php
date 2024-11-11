@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 </head>
@@ -12,7 +13,7 @@
         <aside class="w-64 bg-white shadow-md flex flex-col">
             <!-- Logo Section -->
             <div class="p-6 flex items-center justify-center border-b">
-                <img src="{{ asset('logo.png') }}" alt="Wirtschaft Magazin Logo" width="80%">
+                <img src="{{ asset('logo.png') }}" alt="Wirtschaft Magazin Logo" style="width:140px !important">
             </div>
 
             <!-- Navigation -->

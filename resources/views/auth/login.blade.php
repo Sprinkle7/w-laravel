@@ -6,6 +6,11 @@
     <title>Account Authentication</title>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .w-60 {
+            width: 50%;
+        }
+    </style>    
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen" style="background:url({{ asset('lines.png') }}); background-size:cover;">
     <div class="bg-white shadow-md rounded-lg overflow-hidden flex items-center login" id="auth-container">
@@ -13,7 +18,7 @@
             <img src="{{ asset('bg.png') }}" alt="Illustration" class="w-full h-full object-cover">
         </div>
 
-        <div class="w-full p-10 flex-1 flex-col justify-center" id="auth-forms">
+        <div class="w-60 p-10 flex-1 flex-col justify-center" id="auth-forms">
             <div id="login-form">
                 <img src="{{ asset('logo.png') }}" width="30%" alt="Illustration" class=" object-cover">
                 <h1 class="mt-4 login-heading font-playfair">Anmeldung bei Ihrem Konto</h1>

@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -51,17 +53,41 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'password' => 'nullable|string|min:8|confirmed',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user = Auth::user();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
 
         if ($request->filled('password')) {
-            $user->password = Hash::make($request->input('password'));
+            $user->password = Hash::make($request->password);
+        }
+
+        // Check if the file exists and is valid
+        if ($request->hasFile('profile_image')) {
+            Log::info('File exists');  // Log that the file is detected
+
+            if ($request->file('profile_image')->isValid()) {
+                Log::info('File is valid');  // Log that the file is valid
+
+                // Delete old image if it exists
+                if ($user->profile_image && Storage::exists('public/' . $user->profile_image)) {
+                    Storage::delete('public/' . $user->profile_image);
+                }
+
+                // Store the new image
+                $path = $request->file('profile_image')->store('profile_images', 'public');
+                $user->profile_image = $path;
+            } else {
+                Log::error('File is not valid');  // Log if the file is not valid
+                return back()->withErrors(['profile_image' => 'Uploaded file is not valid.']);
+            }
+        } else {
+            Log::error('No file detected in the request');  // Log if the file is not detected
         }
 
         $user->save();
