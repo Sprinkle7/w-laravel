@@ -26,6 +26,7 @@ class CompanyController extends Controller
                       ->orWhere('vorname', 'like', "%{$search}%")
                       ->orWhere('nachname', 'like', "%{$search}%")
                       ->orWhere('jobtitel', 'like', "%{$search}%")
+                      ->orWhere('firmen_id', 'like', "%{$search}%")
                       ->orWhere('webseite', 'like', "%{$search}%");
             }
     
