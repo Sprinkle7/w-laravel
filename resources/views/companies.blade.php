@@ -293,7 +293,7 @@
                     <div id="progressContainer" style="display: none;" class="mb-4">
                         <div id="progressBar" class="bg-green-600 h-4 rounded"></div>
                     </div>
-                    <button type="submit" class="bg-black text-white w-full py-2 rounded">Upload CSV</button>
+                    <button type="submit" class="bg-black text-white w-full py-2 rounded font-rajdhani font-semibold">Upload CSV</button>
                 </form>
             </div>
         </div>
