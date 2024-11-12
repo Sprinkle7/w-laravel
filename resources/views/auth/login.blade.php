@@ -147,11 +147,16 @@
                 hideIcon.style.display = "none"; 
             }
         }
+
         function showPopupMessage(message, type = 'success') {
             const popup = document.getElementById('popup-message');
             popup.textContent = message;
-            popup.className = 'show'; 
-            popup.classList.add(type === 'error' ? 'error' : '');
+            popup.classList.add('show');
+            if (type === 'error') {
+                popup.classList.add('error');
+            } else {
+                popup.classList.remove('error');
+            }
             setTimeout(() => {
                 popup.classList.remove('show');
             }, 3000);
