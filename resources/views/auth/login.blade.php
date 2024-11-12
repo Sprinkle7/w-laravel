@@ -191,16 +191,16 @@
             const email = document.getElementById('reset-email').value;
             try {
                 await axios.post('/api/password/email', { email });
-                showEmailSent();
                 document.getElementById('maskemail').innerText = maskEmail(email);
                 showPopupMessage('Link zum Zurücksetzen wird an Ihre E-Mail gesendet.','success')
                 const popup = document.getElementById('loader-message');
                 popup.classList.add('hidden');
+                showEmailSent();
             } catch (error) {
+                console.log(error);
                 const popup = document.getElementById('loader-message');
                 popup.classList.add('hidden');
                 showForgotPassword()
-
                 showPopupMessage('Fehler beim Senden des Reset-Links.', 'error');
             }
         }
