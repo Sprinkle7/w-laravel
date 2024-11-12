@@ -47,8 +47,8 @@
 @isset($actionText)
 <x-slot:subcopy>
 @lang(
-    "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
-    'into your web browser:',
+    "Wenn Sie Probleme haben, den Button  \":actionText\" zu klicken, kopieren Sie die folgende URL.".
+    'und fügen Sie sie in Ihren Browser ein:',
     [
         'actionText' => $actionText,
     ]

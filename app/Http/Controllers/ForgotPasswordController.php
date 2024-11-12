@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use App\Notifications\CustomResetPassword;
 
 class ForgotPasswordController extends Controller
 {
@@ -12,13 +13,14 @@ class ForgotPasswordController extends Controller
         $request->validate(['email' => 'required|email']);
 
         $status = Password::sendResetLink(
-            $request->only('email')
+            $request->only('email'),
+            function ($user, $token) {
+                $user->notify(new CustomResetPassword($token));
+            }
         );
-
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json(['message' => 'Reset link sent to your email.'], 200);
-        }
-
-        return response()->json(['message' => 'Unable to send reset link.'], 400);
+    
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['message' => 'Link zum Zurücksetzen wird an Ihre E-Mail gesendet.'], 200)
+            : response()->json(['message' => 'Link zum Zurücksetzen kann nicht gesendet werden.'], 400);
     }
 }

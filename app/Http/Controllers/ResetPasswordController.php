@@ -18,6 +18,7 @@ class ResetPasswordController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
@@ -29,6 +30,7 @@ class ResetPasswordController extends Controller
                 event(new PasswordReset($user));
             }
         );
+
 
         if ($status === Password::PASSWORD_RESET) {
             return response()->json(['message' => 'Das Passwort wurde zurückgesetzt.'], 200);
