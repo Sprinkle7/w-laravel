@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/companies/import', [CompanyController::class, 'import'])->name('companies.import');
+// Route::post('/companies/import', [CompanyController::class, 'import'])->name('companies.import');
 Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
 
