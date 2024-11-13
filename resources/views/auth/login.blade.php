@@ -148,6 +148,10 @@
             }
         }
 
+        @if($errors->any())
+                showPopupMessage('{{ $errors->first() }}', 'error');
+        @endif
+
         function showPopupMessage(message, type = 'success') {
             const popup = document.getElementById('popup-message');
             popup.textContent = message;
@@ -167,7 +171,6 @@
             if (urlParams.has('token') && urlParams.has('email')) {
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('forgot-password-form').style.display = 'none';
-                document.getElementById('reset-password-form').style.display = 'block';
                 document.getElementById('reset-token').value = urlParams.get('token');
                 document.getElementById('reset-email').value = urlParams.get('email');
             }
@@ -180,7 +183,6 @@
 
         function showLogin() {
             document.getElementById('forgot-password-form').style.display = 'none';
-            document.getElementById('reset-password-form').style.display = 'none';
             document.getElementById('login-form').style.display = 'block';
         }
 
