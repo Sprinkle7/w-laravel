@@ -21,6 +21,64 @@
         #popup-message.show {
             opacity: 1;
         }
+        #modalOverlay {
+            display: none; /* Force it to be hidden initially */
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Overlay background with opacity */
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; /* Padding for small screens */
+        }
+        #modalContent {
+            background-color: white;
+            width: 100%;
+            max-width: 470px;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        #modalContent::-webkit-scrollbar {
+            width: 8px; /* Scrollbar width */
+        }
+        #modalContent::-webkit-scrollbar-thumb {
+            background-color: #be1622; /* #be1622 color for the scrollbar thumb */
+            border-radius: 10px; /* Optional: round the corners */
+        }
+        #modalContent::-webkit-scrollbar-thumb:hover {
+            background-color: #be1622; /* Darker red on hover */
+        }
+        .close-button {
+            position: absolute;
+            top: 16px; /* Adjust position as needed */
+            right: 16px; /* Adjust position as needed */
+            background-color: transparent; /* Transparent background */
+            color: #be1622; /* #be1622 color for the "X" icon */
+            border: 2px solid #be1622; /* #be1622 border */
+            border-radius: 50%; /* Make it circular */
+            width: 32px; /* Width of the button */
+            height: 32px; /* Height of the button */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .close-button:hover {
+            background-color: rgba(255, 0, 0, 0.1); /* Light red background on hover */
+        }
+        #modalContent {
+            scrollbar-width: thin; /* Set width to thin */
+            scrollbar-color: #be1622 transparent; /* Red thumb with a transparent track */
+        }
+    <?php
+        $route = route('login');
+    ?>
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <div class="bg-white shadow-md rounded-lg overflow-hidden flex items-center login" id="auth-container">
@@ -92,19 +150,47 @@
             </form>
         </div>
     </div>
+    <div id="modalOverlay" style="display:none">
+        <div id="modalContent">
+            <button onclick="closeModal()" class="close-button">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <h2 class="text-2xl font-bold mb-4 font-playfair" id="title">Fehlgeschlagen</h2>
+            <div id="popup" class=""></div>
+        </div>
+    </div>
     <script>
-        function showPopupMessage(message, type = 'success') {
-            const popup = document.getElementById('popup-message');
+        function openModal() {
+            document.getElementById('modalOverlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            @if(!$errors->any())
+                closeModal(); 
+            @endif
+        });
+        function showPopupMessage(message, type) {
+            openModal()
+            const popup = document.getElementById('popup');
+            const title = document.getElementById('title');
             popup.textContent = message;
-            popup.classList.add('show');
-            if (type === 'error') {
-                popup.classList.add('error');
-            } else {
-                popup.classList.remove('error');
-            }
+            title.textContent = type;
+            // if (type === 'error') {
+            //     popup.classList.add('error');
+            // } else {
+            //     popup.classList.remove('error');
+            // }
             setTimeout(() => {
-                popup.classList.remove('show');
-            }, 3000);
+                closeModal();
+            }, 5000);
         }
 
         async function updatePassword(event) {
@@ -114,14 +200,18 @@
             const email = document.getElementById('reset-email').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             if (password !== confirmPassword) {
-                showPopupMessage('Die Kennwörter stimmen nicht überein.','error');
+                showPopupMessage('Die Kennwörter stimmen nicht überein.','Passwort stimmt nicht überein');
                 return;
             }
             try {
                 await axios.post('/api/password/reset', { password, token, email, password_confirmation:confirmPassword });
-                showPopupMessage('Passwort erfolgreich aktualisiert.','success');
+                showPopupMessage('Passwort erfolgreich aktualisiert.','Erfolg');
+                setTimeout(() => {
+                    location.href = '<?= $route; ?>';
+                }, 2000);
+
             } catch (error) {
-                showPopupMessage('Passwort erfolgreich aktualisiert.','error');
+                showPopupMessage('Passwort kann nicht aktualisiert werden','Gescheitert');
             }
         }
 

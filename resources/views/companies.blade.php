@@ -5,7 +5,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
+<link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <style>
     .dataTables_wrapper {
         font-family: 'rajdhani', sans-serif; /* Replace 'YourCustomFont' with your preferred font */
@@ -88,7 +88,7 @@
         scrollbar-color: #be1622 transparent; /* Red thumb with a transparent track */
     }
 
-        .grid {
+    .grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 16px;
@@ -218,13 +218,87 @@
     #csvModalContent::-webkit-scrollbar {
         width: 8px; /* Scrollbar width */
     }
-
     #csvModalContent::-webkit-scrollbar-thumb {
         background-color: #be1622; /* #be1622 color for the scrollbar thumb */
         border-radius: 10px; /* Optional: round the corners */
     }
-
     #csvModalContent::-webkit-scrollbar-thumb:hover {
+        background-color: #be1622; /* Darker red on hover */
+    }
+
+    .success {
+        color: #178d1e;
+    }
+    .error {
+        color: #be1622;
+    }
+    #ModalOverlayText {
+        display: none; /* Force it to be hidden initially */
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* Overlay background with opacity */
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px; /* Padding for small screens */
+    }
+    #ModalContentText {
+        background-color: white;
+        width: 100%;
+        max-width: 700px;
+        max-height: 70vh;
+        overflow-y: auto;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        scrollbar-width: thin;
+        scrollbar-color: #be1622 transparent; 
+    }
+    #ModalContentText::-webkit-scrollbar {
+        width: 8px; /* Scrollbar width */
+    }
+    #ModalContentText::-webkit-scrollbar-thumb {
+        background-color: #be1622; /* #be1622 color for the scrollbar thumb */
+        border-radius: 10px; /* Optional: round the corners */
+    }
+    #ModalContentText::-webkit-scrollbar-thumb:hover {
+        background-color: #be1622; /* Darker red on hover */
+    }
+
+    #ModalText {
+        display: none; /* Force it to be hidden initially */
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* Overlay background with opacity */
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px; /* Padding for small screens */
+    }
+    #ModalCext {
+        background-color: white;
+        width: 100%;
+        max-width: 400px;
+        max-height: 70vh;
+        overflow-y: auto;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        scrollbar-width: thin;
+        scrollbar-color: #be1622 transparent; 
+    }
+    #ModalCext::-webkit-scrollbar {
+        width: 8px; /* Scrollbar width */
+    }
+    #ModalCext::-webkit-scrollbar-thumb {
+        background-color: #be1622; /* #be1622 color for the scrollbar thumb */
+        border-radius: 10px; /* Optional: round the corners */
+    }
+    #ModalCext::-webkit-scrollbar-thumb:hover {
         background-color: #be1622; /* Darker red on hover */
     }
 
@@ -240,7 +314,6 @@
         width: 0;
         height: 100%;
     }
-
     /* Popup Message Box */
     .message-box {
         position: fixed;
@@ -257,11 +330,12 @@
     .message-box.error {
         background-color: #F44336; /* Red for error */
     }
-
+    .bg-red {
+        background: #be1622;
+    }
 </style>
 
 <div class="container mx-auto p-6">
-    <!-- Add New Company Button -->
     <div class="flex justify-between items-center mb-6">
         <nav class="flex items-center space-x-2 text-gray-600 text-sm" aria-label="Breadcrumb">
             <a class="hover:text-gray-900 font-rajdhani">Unternehmer</a>
@@ -298,8 +372,7 @@
             </div>
         </div>
         
-        <!-- Modal Overlay -->
-        <div id="modalOverlay">
+        <div id="modalOverlay" style="display: none;">
             <!-- Modal Content -->
             <div id="modalContent">
                 <!-- Close Button -->
@@ -447,6 +520,53 @@
                 </form>
             </div>
         </div>
+
+        <div id="ModalOverlayText" style="display: none;">
+            <div id="ModalContentText">
+                <button onclick="closeModalS()" class="close-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                <h2 class="text-2xl font-bold mb-4 font-playfair" id="popup-error">Unternehmerprofil</h2>
+                <p id="popup-message" class="text-xl font-rajdhani font-semibold"></p>
+            </div>
+        </div>
+
+        <div id="ModalText" style="display: none;">
+            <div id="ModalCext">
+                <button onclick="closeModalT()" class="close-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                <h2 class="text-xl font-bold mb-4 font-playfair">Unternehmerprofil löschen</h2>
+                <hr>
+                <h2 class="text-xl font-bold mt-6 font-playfair" id="dl_name">Unternehmerprofil löschen</h2>
+                <small><i class="fas fa-map-marker-alt"></i><span id="location" class="font-rajdhani"> Elly-Heuss-Knapp-Straße</span></small>
+                <div class="flex flex-rows mt-4">
+                    <div class="col-span-1 text-right">
+                        <i class="fas fa-building mt-2 mr-2"></i> 
+                    </div>
+                    <div class="col-span-3">
+                        <h2 class="text-xl font-rajdhani font-semibold">Firmenname</h2>
+                        <h2 class="text-md font-rajdhani" id="firmaname">ASO Service Gmbh</h2>
+                    </div>
+                </div>
+                <p id="description" class="text-md font-regular mt-4 font-rajdhani">Sind sie sicher, dass Sie diesen Unternehmer aus der Liste entfernen möchten? Der Datensatz wird unwiderruflich entfernt.</p>
+
+                <!-- Row 9: Action Buttons (Aligned Right) -->
+                <div id="companyForm" class="grid grid-cols-4 gap-4">
+                    <div class="col-span-2 mt-6 dont-show-in-view">
+                        <button type="button" onclick="closeModalT()" class="px-4 py-2 w-full bg-gray-200 text-gray-700 rounded font-rajdhani font-semibold">Abbrechen</button>
+                    </div>
+                    <div class="col-span-2 mt-6 flex dont-show-in-view justify-end space-x-4" id="submitbutton">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="bg-white overflow-x-auto p-6">  
@@ -480,91 +600,6 @@
 </div>
 <script>
     $(document).ready(function() {
-        // const table = $('#companiesTable').DataTable({
-        //     "processing": true,
-        //     "serverSide": true,
-        //     "ajax": {
-        //         "url": "{{ route('companies.index') }}",
-        //         "type": "GET"
-        //     },
-        //     "columns": [
-        //         { "data": "checkbox", "orderable": false },
-        //         { "data": "id" },
-        //         { "data": "name" },
-        //         { "data": "firmen_id" },
-        //         { "data": "firmenname" },
-        //         { "data": "jobtitel" },
-        //         { "data": "webseite" },
-        //         { "data": "actions", "orderable": false }
-        //     ],
-        //     "dom": "<'top'f><'clear'>t<'bottom'l><'bottom'p>",
-        //     "paging": true,
-        //     "ordering": true,
-        //     "info": true,
-        //     "searching": true,
-        //     "order": [[1, 'asc']],
-        //     "lengthMenu": [10, 25, 50, 60, 80, 100],
-        //     "pagingType": "full_numbers",
-        //     "language": {
-        //         "decimal": ",",
-        //         "thousands": ".",
-        //         "lengthMenu": "Zeige _MENU_ Einträge",
-        //         "zeroRecords": "Keine passenden Einträge gefunden",
-        //         "info": "Zeige Eintrag _START_ bis _END_ von _TOTAL_ Einträgen",
-        //         "infoEmpty": "Keine Einträge verfügbar",
-        //         "infoFiltered": "(gefiltert von _MAX_ Einträgen insgesamt)",
-        //         "search": "Suche:",
-        //         "paginate": {
-        //             "first": "&#8592;",
-        //             "last": "&#8594;",
-        //             "next": "Nächste",
-        //             "previous": "Vorherige"
-        //         }
-        //     }
-        // });
-        // const table = $('#companiesTable').DataTable({
-        //     "processing": true,
-        //     "serverSide": true,
-        //     "ajax": {
-        //         "url": "{{ route('companies.index') }}",
-        //         "type": "GET"
-        //     },
-        //     "columns": [
-        //         { "data": "checkbox", "orderable": false },
-        //         { "data": "id" },
-        //         { "data": "name" },
-        //         { "data": "firmen_id" },
-        //         { "data": "firmenname" },
-        //         { "data": "jobtitel" },
-        //         { "data": "webseite" },
-        //         { "data": "actions", "orderable": false }
-        //     ],
-        //     "dom": "<'top'l><'clear'>rt<'bottom'ip><'clear'>",
-        //     "paging": true,
-        //     "ordering": true,
-        //     "info": true,
-        //     "searching": true,
-        //     "order": [[1, 'asc']],
-        //     "lengthMenu": [10, 25, 50, 60, 80, 100],
-        //     "pagingType": "simple_numbers",
-        //     "language": {
-        //         "decimal": ",",
-        //         "thousands": ".",
-        //         "lengthMenu": "Zeige _MENU_ Einträge",
-        //         "zeroRecords": "Keine passenden Einträge gefunden",
-        //         "info": "Zeige Eintrag _START_ bis _END_ von _TOTAL_ Einträgen",
-        //         "infoEmpty": "Keine Einträge verfügbar",
-        //         "infoFiltered": "(gefiltert von _MAX_ Einträgen insgesamt)",
-        //         "search": "Suche:",
-        //         "paginate": {
-        //             "first": "Erste",
-        //             "last": "Letzte",
-        //             "next": "Nächste",
-        //             "previous": "Vorherige"
-        //         }
-        //     }
-        // });
-
         $('#companiesTable').DataTable({
             "processing": true,
             "serverSide": true,
@@ -604,52 +639,27 @@
             }
         });
 
-        // Reload table on pagination click to ensure smooth interaction
-        // $('#companiesTable').on('draw.dt', function() {
-        //     table.columns.adjust();
-        // });
-
-        $('#companiesTable').on('click', '.view-company-btn', function () {
+        $('#companiesTable').on('click', '.delete-company-btn', function () {
             const companyId = $(this).data('id');
             $.ajax({
                 url: `/companies/${companyId}/edit`,
                 type: 'GET',
                 success: function (data) {
                     $('input[name="id"]').val(data.id);
-                    $('input[name="anrede"]').val(data.anrede);
-                    $('input[name="vorname"]').val(data.vorname);
-                    $('input[name="nachname"]').val(data.nachname);
-                    $('input[name="firmen_id"]').val(data.firmen_id);
-                    $('input[name="firmenname"]').val(data.firmenname);
-                    $('input[name="jobtitel"]').val(data.jobtitel);
-                    $('input[name="email_adresse"]').val(data.email_adresse);
-                    $('input[name="strasse"]').val(data.strasse);
-                    $('input[name="hausnummer"]').val(data.hausnummer);
-                    $('input[name="plz"]').val(data.plz);
-                    $('input[name="ort"]').val(data.ort);
-                    $('input[name="land"]').val(data.land);
-                    $('input[name="telefonnummer"]').val(data.telefonnummer);
-                    $('input[name="telefonnummer_firma"]').val(data.telefonnummer_firma);
-                    $('textarea[name="beschreibung_nace_code_ebene_2"]').val(data.beschreibung_nace_code_ebene_2);
-                    $('input[name="email_adresse_firma"]').val(data.email_adresse_firma);
-                    $('input[name="linkedin_account_firma"]').val(data.linkedin_account_firma);
-                    $('input[name="nace_code_ebene_1"]').val(data.nace_code_ebene_1);
-                    $('input[name="nace_code_ebene_2"]').val(data.nace_code_ebene_2);
-                    $('input[name="wz_code"]').val(data.wz_code);
-                    $('textarea[name="beschreibung_wz_code"]').val(data.beschreibung_wz_code);
-                    $('input[name="webseite"]').val(data.webseite);
-                    $('input[name="branche_hauptkategorie"]').val(data.branche_hauptkategorie);
-                    $('input[name="branche_unterkategorie"]').val(data.branche_unterkategorie);
-                    
-                    openModal();
+                    $('#dl_name').text(`${data.anrede} ${data.vorname} ${data.nachname}`);
+                    $('#location').text(` ${data.hausnummer} ${data.strasse} ${data.ort}, ${data.plz} ${data.land}`);
+                    $('#firmaname').text(data.firmenname);
+                    $('#description').text(data.beschreibung_nace_code_ebene_2);
+                    $('#submitbutton').append(`<button id="submitButton" onclick="deleteCompany(${data.id})" type="button" class="px-4 py-2 w-full bg-red text-white rounded font-rajdhani font-semibold">Löschen</button>`)
+                    openModalT();
                 },
                 error: function (xhr) {
-                    alert('An error occurred while fetching the data.'); 
+                    showMessage('Beim Abrufen der Daten ist ein Fehler aufgetreten.','Scheitern','error');
                 }
             });
         });
 
-        $('#companiesTable').on('click', '.view-company-btn, .edit-company-btn', function () {
+        $('#companiesTable').on('click', '.edit-company-btn', function () {
             const companyId = $(this).data('id');
             const isEdit = $(this).hasClass('edit-company-btn');
             $.ajax({
@@ -661,7 +671,7 @@
                     openModal();
                 },
                 error: function () {
-                    showMessage('Fehler beim Abrufen der Daten', 'error');
+                    showMessage('Fehler beim Abrufen der Daten','Scheitern','error');
                 }
             });
         });
@@ -679,25 +689,18 @@
                 data: $(this).serialize(),
                 success: function () {
                     closeModal();
-                    table.ajax.reload();
-                    showMessage(isEdit ? 'Erfolgreich aktualisiert' : 'Erfolgreich erstellt', 'success');
+                    $('#companiesTable').DataTable().ajax.reload();
+                    showMessage(isEdit ? 'Unternehmen erfolgreich aktualisiert' : 'Unternehmen erfolgreich aktualisiert', 'Erfolg', 'success');
                 },
                 error: function () {
-                    showMessage('Fehler beim Speichern der Daten', 'error');
+                    showMessage('Fehler beim Speichern der Daten', 'Scheitern', 'error');
                 }
             });
-        });
-
-        $('#companiesTable').on('click', '.delete-company-btn', function () {
-            const companyId = $(this).data('id');
-            if (confirm('Möchten Sie diesen Eintrag wirklich löschen?')) {
-                deleteCompany(companyId);
-            }
         });
     });
 
     function deleteCompany(companyId) {
-        console.log("🚀 ~ deleteCompany ~ companyId:", companyId)
+        closeModalT();
         $.ajax({
             url: `/companies/${companyId}`,
             type: 'POST', 
@@ -706,11 +709,11 @@
                 _token: $('meta[name="csrf-token"]').attr('content') 
             },
             success: function(response) {
-                showMessage('Unternehmen erfolgreich gelöscht', 'success');
+                showMessage('Unternehmen erfolgreich gelöscht','Erfolg','success');
                 $('#companiesTable').DataTable().ajax.reload();
             },
             error: function(xhr) {
-                alert('Beim Löschen der Firma ist ein Fehler aufgetreten.');
+                showMessage('Beim Löschen der Firma ist ein Fehler aufgetreten.','Scheitern','error');
             }
         });
     }
@@ -726,10 +729,20 @@
         });
     }
 
-    function showMessage(message, type) {
-        const messageBox = $('<div>').text(message).addClass(`message-box ${type}`);
-        $('body').append(messageBox);
-        setTimeout(() => messageBox.fadeOut(), 3000);
+    function showMessage(message, type, visual) {
+        var pop = document.getElementById('popup-error');
+        pop.textContent = type;
+        pop.classList.add(visual);
+
+        var pops = document.getElementById('popup-message');
+        pops.textContent = message;
+        pops.classList.add(visual);
+        openModalS();
+        setTimeout(() => {
+            closeModal();
+            closeModalS();
+            closeModalT();
+        }, 4000);
     }
 
     function openModal() {
@@ -742,8 +755,30 @@
         document.body.style.overflow = 'auto';
     }
 
+    function openModalT() {
+        document.getElementById('ModalText').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModalT() {
+        document.getElementById('ModalText').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function openModalS() {
+        document.getElementById('ModalOverlayText').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModalS() {
+        document.getElementById('ModalOverlayText').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
         closeModal(); 
+        closeModalS(); 
+        closeModalT();
     });
 
     function openCsvModal() {
@@ -781,7 +816,7 @@
                 return xhr;
             },
             success: function(response) {
-                showMessage(response.message, 'success');
+                showMessage(response.message, 'Erfolg', 'success');
                 closeCsvModal();
 
                 $('#csvUploadForm')[0].reset();
@@ -790,19 +825,13 @@
                 $('#companiesTable').DataTable().ajax.reload(); 
             },
             error: function(xhr) {
-                const errorMessage = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : 'Error during upload';
-                showMessage(errorMessage, 'error');
+                const errorMessage = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : 'Fehler beim Hochladen';
+                showMessage(errorMessage, 'Scheitern','error');
                 progressContainer.hide();
             }
         });
     });
 
-    // Function to show success/error messages
-    function showMessage(message, type) {
-        const messageBox = $('<div>').text(message).addClass(`message-box ${type}`);
-        $('body').append(messageBox);
-        setTimeout(() => messageBox.fadeOut(), 3000);
-    }
 </script>
 @endsection
 

@@ -25,15 +25,12 @@
             transition: opacity 0.5s ease-in-out;
             z-index: 1000;
         }
-
         #popup-message.error {
             background-color: #F44336; /* Red for error messages */
         }
-
         #popup-message.show {
             opacity: 1; /* Show message */
         }
-
         .loader {
             width: 25px;
             position: relative;
@@ -49,6 +46,60 @@
             animation: l5 1s infinite;
         }
         @keyframes l5 {to{transform: rotate(.5turn)}}
+        #modalOverlay {
+            display: none; /* Force it to be hidden initially */
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Overlay background with opacity */
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; /* Padding for small screens */
+        }
+        #modalContent {
+            background-color: white;
+            width: 100%;
+            max-width: 400px;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        #modalContent::-webkit-scrollbar {
+            width: 8px; /* Scrollbar width */
+        }
+        #modalContent::-webkit-scrollbar-thumb {
+            background-color: #be1622; /* #be1622 color for the scrollbar thumb */
+            border-radius: 10px; /* Optional: round the corners */
+        }
+        #modalContent::-webkit-scrollbar-thumb:hover {
+            background-color: #be1622; /* Darker red on hover */
+        }
+        .close-button {
+            position: absolute;
+            top: 16px; /* Adjust position as needed */
+            right: 16px; /* Adjust position as needed */
+            background-color: transparent; /* Transparent background */
+            color: #be1622; /* #be1622 color for the "X" icon */
+            border: 2px solid #be1622; /* #be1622 border */
+            border-radius: 50%; /* Make it circular */
+            width: 32px; /* Width of the button */
+            height: 32px; /* Height of the button */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .close-button:hover {
+            background-color: rgba(255, 0, 0, 0.1); /* Light red background on hover */
+        }
+        #modalContent {
+            scrollbar-width: thin; /* Set width to thin */
+            scrollbar-color: #be1622 transparent; /* Red thumb with a transparent track */
+        }
     </style>    
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen" style="background:url({{ asset('lines.png') }}); background-size:cover;">
@@ -56,7 +107,6 @@
         <div class="md:block flex-1">
             <img src="{{ asset('bg.png') }}" alt="Illustration" class="w-full h-full object-cover">
         </div>
-        <div id="popup-message" class=""></div>
 
         <div class="w-60 p-10 flex-1 flex-col justify-center" id="auth-forms">
             <div id="login-form">
@@ -130,8 +180,35 @@
         </div>
 
     </div>
+    <div id="modalOverlay">
+        <div id="modalContent">
+            <button onclick="closeModal()" class="close-button">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <h2 class="text-2xl font-bold mb-4 font-playfair">Fehlgeschlagen</h2>
+            <div id="popup" class=""></div>
+        </div>
+    </div>
 </body>
     <script>
+        function openModal() {
+            document.getElementById('modalOverlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            @if(!$errors->any())
+                closeModal(); 
+            @endif
+        });
+
         function togglePasswordVisibility(inputId) {
             const passwordInput = document.getElementById(inputId);
             const showIcon = document.getElementById(`show-icon-${inputId}`);
@@ -149,21 +226,21 @@
         }
 
         @if($errors->any())
-                showPopupMessage('{{ $errors->first() }}', 'error');
+            showPopupMessage('Diese Ausweise stimmen nicht mit unseren Unterlagen überein.', 'error');
         @endif
 
         function showPopupMessage(message, type = 'success') {
-            const popup = document.getElementById('popup-message');
+            openModal()
+            const popup = document.getElementById('popup');
             popup.textContent = message;
-            popup.classList.add('show');
-            if (type === 'error') {
-                popup.classList.add('error');
-            } else {
-                popup.classList.remove('error');
-            }
+            // if (type === 'error') {
+            //     popup.classList.add('error');
+            // } else {
+            //     popup.classList.remove('error');
+            // }
             setTimeout(() => {
-                popup.classList.remove('show');
-            }, 3000);
+                closeModal();
+            }, 5000);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -200,8 +277,8 @@
             try {
                 await axios.post('/api/password/email', { email });
                 document.getElementById('maskemail').innerText = maskEmail(email);
-                showPopupMessage('Link zum Zurücksetzen wird an Ihre E-Mail gesendet.')
-                popup.classList.add('hidden');
+                // showPopupMessage('Link zum Zurücksetzen wird an Ihre E-Mail gesendet.',error)
+                // popup.classList.add('hidden');
                 showEmailSent();
             } catch (error) {
                 console.log(error);
