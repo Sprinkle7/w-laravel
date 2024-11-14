@@ -242,6 +242,8 @@
                 closeModal();
             }, 5000);
         }
+        
+        // Title
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
