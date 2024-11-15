@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>Passwort zurücksetzen E-Mail</title>
 </head>
 <body style="background-color: #f3f4f6; font-family: Arial, sans-serif; color: #333; margin: 0; padding: 0;">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+    </style>
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f3f4f6; width: 100%; padding: 20px 0;">
         <tr>
             <td align="center">
@@ -41,7 +43,7 @@
                                     {{ $actionText }} 
                                 </x-mail::button>
                             </div>
-                            <p style="font-size: 14px; color: #666; line-height: 1.5;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
+                            <p style="font-size: 16px; color: #666; line-height: 1.5;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
                                 Wenn Sie diese Anfrage nicht gestellt haben, ignorieren Sie bitte diese E-Mail. Ihr Passwort bleibt sicher.
                                 <br>
                                 Für weitere Unterstützung können Sie uns gerne unter <a href="mailto:help@wirtschaftmagazin.de" style="color: #3b82f6; text-decoration: none;">help@Wirtschaft Magazin</a> kontaktieren.
@@ -55,11 +57,12 @@
                     <tr>
                         <td style="padding: 20px 40px; border-top: 1px solid #e5e7eb; text-align: center;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
                             <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
-                                <img src="{{ asset('tiktok.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
+                                <img src="{{ asset('ticktok.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
                                 <img src="{{ asset('x.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
                                 <img src="{{ asset('instagram.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
                                 <img src="{{ asset('youtube.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
-                                <span style="font-size: 14px; font-weight: bold; color: #333;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">Wirtschaft Magazin</span>
+                                <br>
+                                <span style="font-size: 14px; color: #333;font-family: 'Rajdhani', sans-serif; font-weight: 700;font-style: normal;">Wirtschaft Magazin</span>
                             </div>
                             <!-- <p style="font-size: 12px; color: #666; margin: 4px 0;">&copy; Wirtschaft Magazin Inc</p> -->
                             <!-- <p style="font-size: 12px; color: #666; margin: 4px 0;">2261 Market Street #4650 | San Francisco, CA 94114</p> -->
