@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Passwort zurücksetzen E-Mail</title>
-</head>
-<body style="background-color: #f3f4f6; font-family: Arial, sans-serif; color: #333; margin: 0; padding: 0;">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
     </style>
+</head>
+<body style="background-color: #f3f4f6; font-family: 'Rajdhani', sans-serif; color: #333; margin: 0; padding: 0;">
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f3f4f6; width: 100%; padding: 20px 0;">
         <tr>
             <td align="center">
@@ -31,7 +32,7 @@
                     <tr>
                         <td style="padding: 0 40px;">
                             <p style="font-size: 16px; color: #333; line-height: 1.5; font-family: 'Rajdhani', sans-serif;font-weight: 500;font-style: normal;">
-                                {{ $greeting }},
+                                {{ $greeting }}
                             </p>
                             <br>
                             <p style="font-size: 16px; color: #333; line-height: 1.5;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
@@ -62,7 +63,8 @@
                                 <img src="{{ asset('instagram.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
                                 <img src="{{ asset('youtube.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
                                 <br>
-                                <span style="font-size: 14px; color: #333;font-family: 'Rajdhani', sans-serif; font-weight: 700;font-style: normal;">Wirtschaft Magazin</span>
+                                <br>
+                                <p style="font-size: 14px; color: #333;font-family: 'Rajdhani', sans-serif; font-weight: 700;font-style: normal;">Wirtschaft Magazin</p>
                             </div>
                             <!-- <p style="font-size: 12px; color: #666; margin: 4px 0;">&copy; Wirtschaft Magazin Inc</p> -->
                             <!-- <p style="font-size: 12px; color: #666; margin: 4px 0;">2261 Market Street #4650 | San Francisco, CA 94114</p> -->
