@@ -6,7 +6,8 @@
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-<style>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <style>
     .dataTables_wrapper {
         font-family: 'rajdhani', sans-serif; /* Replace 'YourCustomFont' with your preferred font */
     }
@@ -667,8 +668,8 @@
                 type: 'GET',
                 success: function (data) {
                     $('#companyForm').data('isEdit', isEdit); 
-                    populateForm(data, isEdit);
                     openModal();
+                    populateForm(data, isEdit);
                 },
                 error: function () {
                     showMessage('Fehler beim Abrufen der Daten','Scheitern','error');
@@ -746,6 +747,7 @@
     }
 
     function openModal() {
+        document.getElementById("companyForm").reset();
         document.getElementById('modalOverlay').style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }

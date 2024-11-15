@@ -6,6 +6,7 @@
     <title>Account Authentication</title>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <style>
         .w-60 {
             width: 50%;
@@ -143,7 +144,7 @@
                             </defs>
                         </svg>
 
-                        <input type="password" id="password" placeholder="Passwort" name="password" required class="mt-1 block w-full px-4 py-2 border rounded-md">
+                        <input type="password" id="password" placeholder="Passwort" name="password" required class="mt-1 block w-full px-4 py-2 border rounded-md font-rajdhani">
                     </div>
                     <div class="text-right">
                         <a href="javascript:void(0);" onclick="showForgotPassword()" class="text-sm text-gray-600 hover:text-gray-900 font-semibold">Passwort vergessen?</a>
@@ -187,7 +188,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
-            <h2 class="text-2xl font-bold mb-4 font-playfair">Fehlgeschlagen</h2>
+            <h2 class="text-2xl font-bold mb-4 font-playfair">Anmeldung fehlgeschlagen</h2>
             <div id="popup" class=""></div>
         </div>
     </div>
@@ -226,7 +227,7 @@
         }
 
         @if($errors->any())
-            showPopupMessage('Diese Ausweise stimmen nicht mit unseren Unterlagen überein.', 'error');
+            showPopupMessage('Die E-Mail-Adresse oder das Passwort, das Sie eingegeben haben, ist falsch.', 'error');
         @endif
 
         function showPopupMessage(message, type = 'success') {
