@@ -1,13 +1,12 @@
 @extends('layouts.app')
 @section('content')
-
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <style>
+<link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+<style>
     .dataTables_wrapper {
         font-family: 'rajdhani', sans-serif; /* Replace 'YourCustomFont' with your preferred font */
     }
@@ -335,7 +334,6 @@
         background: #be1622;
     }
 </style>
-
 <div class="container mx-auto p-6">
     <div class="flex justify-between items-center mb-6">
         <nav class="flex items-center space-x-2 text-gray-600 text-sm" aria-label="Breadcrumb">
@@ -368,7 +366,7 @@
                     <div id="progressContainer" style="display: none;" class="mb-4">
                         <div id="progressBar" class="bg-green-600 h-4 rounded font-rajdhani font-semibold"></div>
                     </div>
-                    <button type="submit" class="bg-black text-white w-full py-2 rounded font-rajdhani font-semibold">Upload CSV</button>
+                    <button type="submit" class="bg-black text-white w-full py-2 rounded font-rajdhani font-semibold">Daten hochladen</button>
                 </form>
             </div>
         </div>

@@ -1,20 +1,21 @@
 <?php
 namespace App\Notifications;
-
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Notifications\Messages\MailMessage;
 
 
-class CustomResetPassword extends ResetPasswordNotification
+class CustomResetPassword extends ResetPasswordNotification 
 {
     public $customIntroText;
     public $customOutroText;
+    public $name;
 
-    public function __construct($token, $customIntroText = null, $customOutroText = null)
+    public function __construct($token, $name, $customIntroText = null, $customOutroText = null)
     {
         parent::__construct($token);
         $this->customIntroText = $customIntroText;
         $this->customOutroText = $customOutroText;
+        $this->name = $name;
     }
 
     public function toMail($notifiable)
@@ -25,11 +26,10 @@ class CustomResetPassword extends ResetPasswordNotification
         ], false));
 
         return (new MailMessage)
-            ->subject('Benachrichtigung zum Zurücksetzen des Passworts')
-            ->greeting('Hallo!')
-            ->line('Sie erhalten diese E-Mail, weil wir eine Anfrage zum Zurücksetzen des Passworts für Ihr Konto erhalten haben.')
-            ->action('Passwort zurücksetzen', $url)
-            ->line('Wenn Sie keine Rücksetzung des Passworts beantragt haben, sind keine weiteren Schritte erforderlich.')
-            ->salutation('Best Regards','Wirtschaft');
+        ->subject('Passwort zurücksetzen')
+        ->greeting('Hallo ' . $this->name . ',')
+        ->line($this->customIntroText ?? 'Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts erhalten.')
+        ->action('Passwort zurücksetzen', $url)
+        ->line($this->customOutroText ?? 'Wenn Sie keine Passwortzurücksetzung angefordert haben, ignorieren Sie diese E-Mail.');
     }
 }
