@@ -390,7 +390,7 @@
                     <!-- Row 1: ID -->
                     <div class="col-span-5">
                         <label class="block text-gray-700 font-rajdhani font-semibold">ID</label>
-                        <input type="text" name="cid" class="w-full border border-gray-300 p-2 rounded font-rajdhani" readonly>
+                        <input type="text" name="cid" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <!-- Row 2: Anrede, Vorname, Nachname -->
