@@ -58,14 +58,14 @@
                     <tr>
                         <td style="padding: 20px 40px; border-top: 1px solid #e5e7eb; text-align: center;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
                             <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
-                                <img src="{{ asset('ticktok.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
-                                <img src="{{ asset('x.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
-                                <img src="{{ asset('instagram.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
-                                <img src="{{ asset('youtube.png') }}" alt="Wirtschaft Logo" style="width: 32px; height: 32px; margin-right: 8px;">
-                                <br>
-                                <br>
-                                <p style="font-size: 14px; color: #333;font-family: 'Rajdhani', sans-serif; font-weight: 700;font-style: normal;">Wirtschaft Magazin</p>
+                                <img src="{{ asset('ticktok.png') }}" alt="Wirtschaft Logo" style="width: 28px; height: 28px; margin-right: 8px;">
+                                <img src="{{ asset('x.png') }}" alt="Wirtschaft Logo" style="width: 28px; height: 28px; margin-right: 8px;">
+                                <img src="{{ asset('instagram.png') }}" alt="Wirtschaft Logo" style="width: 28px; height: 28px; margin-right: 8px;">
+                                <img src="{{ asset('youtube.png') }}" alt="Wirtschaft Logo" style="width: 28px; height: 28px; margin-right: 8px;">
+                                
                             </div>
+                            <br>
+                            <p style="font-size: 14px; color: #333;font-family: 'Rajdhani', sans-serif; font-weight: 700;font-style: normal;">Wirtschaft Magazin</p>
                             <!-- <p style="font-size: 12px; color: #666; margin: 4px 0;">&copy; Wirtschaft Magazin Inc</p> -->
                             <!-- <p style="font-size: 12px; color: #666; margin: 4px 0;">2261 Market Street #4650 | San Francisco, CA 94114</p> -->
                         </td>
