@@ -31,11 +31,11 @@
                     <!-- Content Section -->
                     <tr>
                         <td style="padding: 0 40px;">
-                            <p style="font-size: 16px; color: #333; line-height: 1.5; font-family: 'Rajdhani', sans-serif;font-weight: 500;font-style: normal;">
+                            <p style="font-size: 14px; color: #333; line-height: 1.5; font-family: 'Rajdhani', sans-serif;font-weight: 500;font-style: normal;">
                                 {{ $greeting }}
                             </p>
                             <br>
-                            <p style="font-size: 16px; color: #333; line-height: 1.5;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
+                            <p style="font-size: 14px; color: #333; line-height: 1.5;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
                                 Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts für Ihr Konto bei Wirtschaft Magazin erhalten. <br>
                                 Klicken Sie auf die Schaltfläche unten, um ein neues Passwort festzulegen.
                             </p>
@@ -44,12 +44,12 @@
                                     {{ $actionText }} 
                                 </x-mail::button>
                             </div>
-                            <p style="font-size: 16px; color: #666; line-height: 1.5;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
+                            <p style="font-size: 14px; color: #666; line-height: 1.5;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
                                 Wenn Sie diese Anfrage nicht gestellt haben, ignorieren Sie bitte diese E-Mail. Ihr Passwort bleibt sicher.
                                 <br>
                                 Für weitere Unterstützung können Sie uns gerne unter <a href="mailto:help@wirtschaftmagazin.de" style="color: #3b82f6; text-decoration: none;">help@Wirtschaft Magazin</a> kontaktieren.
                             </p>
-                            <p style="font-size: 16px; color: #333; margin-top: 20px;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
+                            <p style="font-size: 14px; color: #333;line-height: 1.5; margin-top: 20px;font-family: 'Rajdhani', sans-serif; font-weight: 400;font-style: normal;">
                             Mit freundlichen Grüßen,,<br>Das Team von Wirtschaft Magazin
                             </p>
                         </td>
