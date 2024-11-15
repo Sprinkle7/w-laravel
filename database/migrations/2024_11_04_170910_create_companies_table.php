@@ -17,6 +17,7 @@ class CreateCompaniesTable extends Migration
             $table->id();
             $table->text('nachname')->nullable();              
             $table->text('firmenname')->nullable();
+            $table->text('cid')->nullable();
             $table->text('jobtitel')->nullable();
             $table->text('beschreibung_nace_code_ebene_2')->nullable();  
             $table->text('anrede')->nullable();                      // Anrede

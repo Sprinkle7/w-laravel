@@ -16,6 +16,7 @@ class Company extends Model
         'firmen_id',
         'firmenname',
         'jobtitel',
+        'cid',
         'webseite',
         'email_adresse',
         'strasse',

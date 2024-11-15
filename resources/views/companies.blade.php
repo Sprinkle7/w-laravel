@@ -390,7 +390,7 @@
                     <!-- Row 1: ID -->
                     <div class="col-span-5">
                         <label class="block text-gray-700 font-rajdhani font-semibold">ID</label>
-                        <input type="text" name="id" class="w-full border border-gray-300 p-2 rounded font-rajdhani" readonly>
+                        <input type="text" name="cid" class="w-full border border-gray-300 p-2 rounded font-rajdhani" readonly>
                     </div>
 
                     <!-- Row 2: Anrede, Vorname, Nachname -->
@@ -724,7 +724,11 @@
             $('.dont-show-in-view').show();
         }
         Object.keys(data).forEach(key => {
-            $(`input[name="${key}"]`).val(data[key]);
+            if(key !== 'beschreibung_nace_code_ebene_2' && key !== 'beschreibung_wz_code') {
+                $(`input[name="${key}"]`).val(data[key]);
+            } else {
+                $(`textarea[name="${key}"]`).val(data[key]);
+            }
         });
     }
 
