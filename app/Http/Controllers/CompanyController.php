@@ -100,11 +100,11 @@ class CompanyController extends Controller
 
         // Define the expected columns and their mappings
         $requiredColumns = [
-            'ID', 'Anrede', 'Vorname', 'Nachname', 'Firmen-ID', 'Firmenname', 'Jobtitel', 'Webseite',
+            'ID','Titel','Anrede', 'Vorname', 'Nachname', 'Firmen-ID', 'Firmenname', 'Jobtitel', 'Webseite',
             'E-Mail-Adresse', 'Straße', 'Hausnummer', 'PLZ', 'Ort', 'Land', 'Telefonnummer',
             'Telefonnummer (Firma)', 'E-Mail-Adresse (Firma)', 'LinkedIn Account (Firma)',
             'NACE-Code (Ebene 1)', 'NACE-Code (Ebene 2)', 'Beschreibung NACE-Code (Ebene 2)',
-            'WZ-Code', 'Beschreibung WZ-Code', 'Branche (Hauptkategorie)', 'Branche (Unterkategorie)'
+            'WZ-Code', 'Beschreibung WZ-Code', 'Branche (Hauptkategorie)', 'Branche (Unterkategorie)','Weitere Quellen'
         ];
 
         // Read the CSV header row and map it to column indices
@@ -129,6 +129,7 @@ class CompanyController extends Controller
 
             // Prepare the data for either updating or creating the record
             $data = [
+                'title' => $row[$columnMap['Titel']] ?? null,
                 'anrede' => $row[$columnMap['Anrede']] ?? null,
                 'vorname' => $row[$columnMap['Vorname']] ?? null,
                 'nachname' => $row[$columnMap['Nachname']] ?? null,
@@ -153,7 +154,8 @@ class CompanyController extends Controller
                 'wz_code' => $row[$columnMap['WZ-Code']] ?? null,
                 'beschreibung_wz_code' => $row[$columnMap['Beschreibung WZ-Code']] ?? null,
                 'branche_hauptkategorie' => $row[$columnMap['Branche (Hauptkategorie)']] ?? null,
-                'branche_unterkategorie' => $row[$columnMap['Branche (Unterkategorie)']] ?? null
+                'branche_unterkategorie' => $row[$columnMap['Branche (Unterkategorie)']] ?? null,
+                'other_sources' => $row[$columnMap['Weitere Quellen']] ?? null
             ];
 
             // Update if exists, otherwise create a new record
@@ -172,7 +174,7 @@ class CompanyController extends Controller
     public function import_frontend(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:csv,txt|max:28585048', // Max size 2MB
+            'file' => 'required|mimes:csv,txt|max:28585048',
         ]);
 
         if ($validator->fails()) {
@@ -185,11 +187,11 @@ class CompanyController extends Controller
 
         // Define columns and map
         $requiredColumns = [
-            'ID', 'Anrede', 'Vorname', 'Nachname', 'Firmen-ID', 'Firmenname', 'Jobtitel', 'Webseite',
+            'ID','Titel' ,'Anrede', 'Vorname', 'Nachname', 'Firmen-ID', 'Firmenname', 'Jobtitel', 'Webseite',
             'E-Mail-Adresse', 'Straße', 'Hausnummer', 'PLZ', 'Ort', 'Land', 'Telefonnummer',
             'Telefonnummer (Firma)', 'E-Mail-Adresse (Firma)', 'LinkedIn Account (Firma)',
             'NACE-Code (Ebene 1)', 'NACE-Code (Ebene 2)', 'Beschreibung NACE-Code (Ebene 2)',
-            'WZ-Code', 'Beschreibung WZ-Code', 'Branche (Hauptkategorie)', 'Branche (Unterkategorie)'
+            'WZ-Code', 'Beschreibung WZ-Code', 'Branche (Hauptkategorie)', 'Branche (Unterkategorie)','Weitere Quellen'
         ];
 
         $header = fgetcsv($handle, 0, ",");
@@ -203,9 +205,10 @@ class CompanyController extends Controller
         }
 
         // Process CSV rows
-        try {
+        // try {
             while (($row = fgetcsv($handle, 0, ",")) !== false) {
                 $data = [
+                    'title' => $row[$columnMap['Titel']] ?? null,
                     'anrede' => $row[$columnMap['Anrede']] ?? null,
                     'vorname' => $row[$columnMap['Vorname']] ?? null,
                     'nachname' => $row[$columnMap['Nachname']] ?? null,
@@ -230,22 +233,24 @@ class CompanyController extends Controller
                     'wz_code' => $row[$columnMap['WZ-Code']] ?? null,
                     'beschreibung_wz_code' => $row[$columnMap['Beschreibung WZ-Code']] ?? null,
                     'branche_hauptkategorie' => $row[$columnMap['Branche (Hauptkategorie)']] ?? null,
-                    'branche_unterkategorie' => $row[$columnMap['Branche (Unterkategorie)']] ?? null
+                    'branche_unterkategorie' => $row[$columnMap['Branche (Unterkategorie)']] ?? null,
+                    'other_sources' => $row[$columnMap['Weitere Quellen']] ?? null
                 ];
                 Company::updateOrCreate(['firmen_id' => $data['firmen_id']], $data);
             }
             fclose($handle);
             return response()->json(['message' => 'Erfolgreich importierte Unternehmen, ggf. mit Aktualisierungen'], 200);
 
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Bei der Verarbeitung ist ein Fehler aufgetreten'], 500);
-        }
+        // } catch (\Exception $e) {
+        //     return response()->json(['error' => 'Bei der Verarbeitung ist ein Fehler aufgetreten'], 500);
+        // }
     }
 
     
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'title' => 'nullable|string|max:255',
             'anrede' => 'nullable|string|max:255',
             'vorname' => 'nullable|string|max:255',
             'nachname' => 'nullable|string|max:255',
@@ -260,6 +265,7 @@ class CompanyController extends Controller
             'land' => 'nullable|string|max:255',
             'telefonnummer' => 'nullable|string|max:255',
             'telefonnummer_firma' => 'nullable|string|max:255',
+            'other_sources' => 'nullable|string|max:255'
         ]);
 
         $company = Company::updateOrCreate(['firmen_id' => $validated['firmen_id']], $validated);

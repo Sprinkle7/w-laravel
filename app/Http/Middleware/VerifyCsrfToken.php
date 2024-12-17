@@ -14,5 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'api/companies/import', 
         'companies/import', 
+        'generate-article'
     ];
 }

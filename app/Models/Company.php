@@ -10,6 +10,8 @@ class Company extends Model
     use HasFactory;
 
     protected $fillable = [
+        'other_sources',
+        'title',
         'anrede',
         'vorname',
         'nachname',

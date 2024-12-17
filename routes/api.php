@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\ArticleController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,10 +23,8 @@ Route::middleware(\App\Http\Middleware\VerifyApiCredentials::class)->group(funct
     Route::get('/details/{id}', [SearchController::class, 'details']);
     Route::get('/load-more', [SearchController::class, 'loadMore']);
 });
-// Route::middleware('verify.api.credentials')->group(function () {
-//     Route::get('/search', [SearchController::class, 'search']);
-//     Route::get('/details/{id}', [SearchController::class, 'details']);
-// });
+
+Route::post('/generate-article', [ArticleController::class, 'generateArticle']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
