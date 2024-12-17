@@ -86,7 +86,7 @@ class CompanyController extends Controller
     {
         // Validate the uploaded file
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:csv,txt|max:2048', // Max size 2MB, adjust if necessary
+            'file' => 'required|mimes:csv,txt|max:250048', // Max size 2MB, adjust if necessary
         ]);
 
         if ($validator->fails()) {
@@ -104,7 +104,7 @@ class CompanyController extends Controller
             'E-Mail-Adresse', 'Straße', 'Hausnummer', 'PLZ', 'Ort', 'Land', 'Telefonnummer',
             'Telefonnummer (Firma)', 'E-Mail-Adresse (Firma)', 'LinkedIn Account (Firma)',
             'NACE-Code (Ebene 1)', 'NACE-Code (Ebene 2)', 'Beschreibung NACE-Code (Ebene 2)',
-            'WZ-Code', 'Beschreibung WZ-Code', 'Branche (Hauptkategorie)', 'Branche (Unterkategorie)','Weitere Quellen'
+            'WZ-Code', 'Beschreibung WZ-Code', 'Branche (Hauptkategorie)', 'Branche (Unterkategorie)','Weitere Quellen','KI TEXT'
         ];
 
         // Read the CSV header row and map it to column indices
@@ -126,6 +126,82 @@ class CompanyController extends Controller
         while (($row = fgetcsv($handle, 0, ",")) !== false) {
             // Check if the company with this 'firmen_id' already exists
             $company = Company::where('firmen_id', $row[$columnMap['Firmen-ID']] ?? null)->first();
+            $rawContent = $row[$columnMap['KI TEXT']];
+            // 1) Extract the meta title:
+            $metaTitle = '';
+            $metaDescription = '';
+            $htmlContent = '';
+
+            if(!empty($rawContent)) {
+                if (preg_match('/Meta-Titel:\s*(.*)/i', $rawContent, $matchesTitle)) {
+                    $metaTitle = trim($matchesTitle[1]);
+                }
+
+                if (preg_match('/Meta-Description:\s*(.*)/i', $rawContent, $matchesDesc)) {
+                    $metaDescription = trim($matchesDesc[1]);
+                }
+
+                $processed = preg_replace('/Meta-Titel:.*(\r?\n)?/i', '', $rawContent);
+                $processed = preg_replace('/Meta-Description:.*(\r?\n)?/i', '', $processed);
+
+                $lines = preg_split('/\r?\n/', $processed);
+                $htmlLines = [];
+
+                foreach ($lines as $line) {
+                    $original = trim($line);
+                    if ($original === '') {
+                        continue; 
+                    }
+
+                    if (preg_match('/^#{3}\s+(.*)/', $original, $m)) {
+                        $htmlLines[] = "<h3>".trim($m[1])."</h3>";
+                        continue;
+                    }
+
+                    if (preg_match('/^#{2}\s+(.*)/', $original, $m)) {
+                        $htmlLines[] = "<h2>".trim($m[1])."</h2>";
+                        continue;
+                    }
+
+                    if (preg_match('/^#\s+(.*)/', $original, $m)) {
+                        $htmlLines[] = "<h1>".trim($m[1])."</h1>";
+                        continue;
+                    }
+
+                    if (preg_match('/^H1:\s*(.*)/i', $original, $m)) {
+                        $htmlLines[] = "<h1>".trim($m[1])."</h1>";
+                        continue;
+                    }
+
+                    if (preg_match('/^H2:\s*(.*)/i', $original, $m)) {
+                        $htmlLines[] = "<h2>".trim($m[1])."</h2>";
+                        continue;
+                    }
+
+                    if (preg_match('/^H3:\s*(.*)/i', $original, $m)) {
+                        $htmlLines[] = "<h3>".trim($m[1])."</h3>";
+                        continue;
+                    }
+
+                    $lineNoStars = preg_replace('/^\*+\s*/', '', $original);
+
+                    if ($lineNoStars !== $original) {
+                        $htmlLines[] = "<p>" . trim($lineNoStars) . "</p>";
+                        continue;
+                    }
+
+                    $htmlLines[] = "<p>".$original."</p>";
+                }
+
+                $htmlContent = implode("\n", $htmlLines);
+                $metaTitle = preg_replace('/^\**\s*/', '', $metaTitle);
+                $metaDescription = preg_replace('/^\**\s*/', '', $metaDescription);
+                $metaTitle = preg_replace('/\*+/', '', $metaTitle);
+                $metaDescription = preg_replace('/\*+/', '', $metaDescription);
+                $htmlContent = preg_replace('/\(H\d\)/i', '', $htmlContent);
+                $htmlContent = preg_replace('/\*+/', '', $htmlContent);
+                $htmlContent = preg_replace('/H\d:\s*/i', '', $htmlContent);
+            }
 
             // Prepare the data for either updating or creating the record
             $data = [
@@ -155,7 +231,11 @@ class CompanyController extends Controller
                 'beschreibung_wz_code' => $row[$columnMap['Beschreibung WZ-Code']] ?? null,
                 'branche_hauptkategorie' => $row[$columnMap['Branche (Hauptkategorie)']] ?? null,
                 'branche_unterkategorie' => $row[$columnMap['Branche (Unterkategorie)']] ?? null,
-                'other_sources' => $row[$columnMap['Weitere Quellen']] ?? null
+                'other_sources' => $row[$columnMap['Weitere Quellen']] ?? null,
+                'checking' => $row[$columnMap['KI TEXT']] ?? null,
+                'meta_title' => $metaTitle,
+                'meta_description' => $metaDescription,
+                'html_content' => $htmlContent
             ];
 
             // Update if exists, otherwise create a new record
@@ -172,7 +252,7 @@ class CompanyController extends Controller
     }
 
     public function import_frontend(Request $request)
-    {
+    {   
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:csv,txt|max:28585048',
         ]);
@@ -182,6 +262,7 @@ class CompanyController extends Controller
         }
 
         $file = $request->file('file');
+
         $filePath = $file->getRealPath();
         $handle = fopen($filePath, 'r');
 
@@ -191,7 +272,7 @@ class CompanyController extends Controller
             'E-Mail-Adresse', 'Straße', 'Hausnummer', 'PLZ', 'Ort', 'Land', 'Telefonnummer',
             'Telefonnummer (Firma)', 'E-Mail-Adresse (Firma)', 'LinkedIn Account (Firma)',
             'NACE-Code (Ebene 1)', 'NACE-Code (Ebene 2)', 'Beschreibung NACE-Code (Ebene 2)',
-            'WZ-Code', 'Beschreibung WZ-Code', 'Branche (Hauptkategorie)', 'Branche (Unterkategorie)','Weitere Quellen'
+            'WZ-Code', 'Beschreibung WZ-Code', 'Branche (Hauptkategorie)', 'Branche (Unterkategorie)','Weitere Quellen','KI TEXT'
         ];
 
         $header = fgetcsv($handle, 0, ",");
@@ -207,6 +288,83 @@ class CompanyController extends Controller
         // Process CSV rows
         // try {
             while (($row = fgetcsv($handle, 0, ",")) !== false) {
+                $rawContent = $row[$columnMap['KI TEXT']];
+
+                $metaTitle = '';
+                $metaDescription = '';
+                $htmlContent = '';
+
+                if(!empty($rawContent)) {
+                    if (preg_match('/Meta-Titel:\s*(.*)/i', $rawContent, $matchesTitle)) {
+                        $metaTitle = trim($matchesTitle[1]);
+                    }
+
+                    if (preg_match('/Meta-Description:\s*(.*)/i', $rawContent, $matchesDesc)) {
+                        $metaDescription = trim($matchesDesc[1]);
+                    }
+
+                    $processed = preg_replace('/Meta-Titel:.*(\r?\n)?/i', '', $rawContent);
+                    $processed = preg_replace('/Meta-Description:.*(\r?\n)?/i', '', $processed);
+
+                    $lines = preg_split('/\r?\n/', $processed);
+                    $htmlLines = [];
+
+                    foreach ($lines as $line) {
+                        $original = trim($line);
+                        if ($original === '') {
+                            continue; 
+                        }
+
+                        if (preg_match('/^#{3}\s+(.*)/', $original, $m)) {
+                            $htmlLines[] = "<h3>".trim($m[1])."</h3>";
+                            continue;
+                        }
+
+                        if (preg_match('/^#{2}\s+(.*)/', $original, $m)) {
+                            $htmlLines[] = "<h2>".trim($m[1])."</h2>";
+                            continue;
+                        }
+
+                        if (preg_match('/^#\s+(.*)/', $original, $m)) {
+                            $htmlLines[] = "<h1>".trim($m[1])."</h1>";
+                            continue;
+                        }
+
+                        if (preg_match('/^H1:\s*(.*)/i', $original, $m)) {
+                            $htmlLines[] = "<h1>".trim($m[1])."</h1>";
+                            continue;
+                        }
+
+                        if (preg_match('/^H2:\s*(.*)/i', $original, $m)) {
+                            $htmlLines[] = "<h2>".trim($m[1])."</h2>";
+                            continue;
+                        }
+
+                        if (preg_match('/^H3:\s*(.*)/i', $original, $m)) {
+                            $htmlLines[] = "<h3>".trim($m[1])."</h3>";
+                            continue;
+                        }
+
+                        $lineNoStars = preg_replace('/^\*+\s*/', '', $original);
+
+                        if ($lineNoStars !== $original) {
+                            $htmlLines[] = "<p>" . trim($lineNoStars) . "</p>";
+                            continue;
+                        }
+
+                        $htmlLines[] = "<p>".$original."</p>";
+                    }
+
+                    $htmlContent = implode("\n", $htmlLines);
+                    $metaTitle = preg_replace('/^\**\s*/', '', $metaTitle);
+                    $metaDescription = preg_replace('/^\**\s*/', '', $metaDescription);
+                    $metaTitle = preg_replace('/\*+/', '', $metaTitle);
+                    $metaDescription = preg_replace('/\*+/', '', $metaDescription);
+                    $htmlContent = preg_replace('/\(H\d\)/i', '', $htmlContent);
+                    $htmlContent = preg_replace('/\*+/', '', $htmlContent);
+                    $htmlContent = preg_replace('/H\d:\s*/i', '', $htmlContent);
+                }
+
                 $data = [
                     'title' => $row[$columnMap['Titel']] ?? null,
                     'anrede' => $row[$columnMap['Anrede']] ?? null,
@@ -234,10 +392,14 @@ class CompanyController extends Controller
                     'beschreibung_wz_code' => $row[$columnMap['Beschreibung WZ-Code']] ?? null,
                     'branche_hauptkategorie' => $row[$columnMap['Branche (Hauptkategorie)']] ?? null,
                     'branche_unterkategorie' => $row[$columnMap['Branche (Unterkategorie)']] ?? null,
-                    'other_sources' => $row[$columnMap['Weitere Quellen']] ?? null
+                    'other_sources' => $row[$columnMap['Weitere Quellen']] ?? null,
+                    'meta_title' => $metaTitle,
+                    'meta_description' => $metaDescription,
+                    'html_content' => $htmlContent
                 ];
                 Company::updateOrCreate(['firmen_id' => $data['firmen_id']], $data);
             }
+
             fclose($handle);
             return response()->json(['message' => 'Erfolgreich importierte Unternehmen, ggf. mit Aktualisierungen'], 200);
 

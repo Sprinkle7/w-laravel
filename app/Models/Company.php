@@ -38,6 +38,9 @@ class Company extends Model
         'branche_hauptkategorie',
         'branche_unterkategorie',
         'status',
+        'meta_title',
+        'meta_description',
+        'html_content',
         'duplicate',
     ];
 }

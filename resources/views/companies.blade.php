@@ -820,6 +820,7 @@
                 return xhr;
             },
             success: function(response) {
+                console.log("🚀 ~ $ ~ response:", response)
                 showMessage(response.message, 'Erfolg', 'success');
                 closeCsvModal();
 
