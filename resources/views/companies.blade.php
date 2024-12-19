@@ -6,6 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 <style>
     .dataTables_wrapper {
         font-family: 'rajdhani', sans-serif; /* Replace 'YourCustomFont' with your preferred font */
@@ -391,6 +392,7 @@
                     <div class="col-span-5">
                         <label class="block text-gray-700 font-rajdhani font-semibold">ID</label>
                         <input type="text" name="cid" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
+                        <input type="hidden" name="id" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
 
                     <!-- Row 2: Anrede, Vorname, Nachname -->
@@ -509,6 +511,9 @@
                         <label class="block text-gray-700 font-rajdhani font-semibold">Webseite</label>
                         <input type="text" name="webseite" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
                     </div>
+                    <div class="col-span-5">
+                        <div id="editor" style="height: 300px;" class="h-80 border border-gray-300 rounded-md"></div>
+                    </div>
                     <!-- Row 9: Action Buttons (Aligned Right) -->
                     <div class="col-span-2 mt-6 dont-show-in-view">
                         <button type="button" onclick="closeModal()" class="px-4 py-2 w-full bg-gray-200 text-gray-700 rounded font-rajdhani font-semibold">Abbrechen</button>
@@ -597,7 +602,12 @@
         </table>
     </div>
 </div>
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script>
+    var quill = new Quill('#editor', {
+        theme: 'snow'
+    });
+
     $(document).ready(function() {
         $('#companiesTable').DataTable({
             "processing": true,
@@ -667,6 +677,7 @@
                 success: function (data) {
                     $('#companyForm').data('isEdit', isEdit); 
                     openModal();
+                    console.log(data);
                     populateForm(data, isEdit);
                 },
                 error: function () {
@@ -679,13 +690,20 @@
             e.preventDefault();
             const isEdit = $(this).data('isEdit');
             const companyId = $('input[name="id"]').val();
+            console.log("🚀 ~ companyId:", companyId)
             const url = isEdit ? `/companies/${companyId}` : '/companies';
             const method = isEdit ? 'PUT' : 'POST';
+
+            const formData = $(this).serializeArray(); // Get form data as an array
+            formData.push(
+                { name: 'html_content', value: quill.root.innerHTML } 
+            );
+            console.log("🚀 ~ formData:", formData)
 
             $.ajax({
                 url: url,
                 type: method,
-                data: $(this).serialize(),
+                data: $.param(formData),
                 success: function () {
                     closeModal();
                     $('#companiesTable').DataTable().ajax.reload();
@@ -724,10 +742,14 @@
             $('.dont-show-in-view').show();
         }
         Object.keys(data).forEach(key => {
-            if(key !== 'beschreibung_nace_code_ebene_2' && key !== 'beschreibung_wz_code') {
+            if(key !== 'beschreibung_nace_code_ebene_2' && key !== 'beschreibung_wz_code' && key !== 'html_content') {
                 $(`input[name="${key}"]`).val(data[key]);
             } else {
-                $(`textarea[name="${key}"]`).val(data[key]);
+                if(key === 'html_content') {
+                    quill.root.innerHTML = data[key]
+                } else {
+                    $(`textarea[name="${key}"]`).val(data[key]);
+                }
             }
         });
     }
