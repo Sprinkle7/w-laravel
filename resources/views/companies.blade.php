@@ -514,6 +514,14 @@
                     <div class="col-span-5">
                         <div id="editor" style="height: 300px;" class="h-80 border border-gray-300 rounded-md"></div>
                     </div>
+                    <div class="col-span-5">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Meta-Titel</label>
+                        <input type="text" name="meta_title" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
+                    </div>
+                    <div class="col-span-5">
+                        <label class="block text-gray-700 font-rajdhani font-semibold">Meta Description</label>
+                        <input type="text" name="meta_description" class="w-full border border-gray-300 p-2 rounded font-rajdhani">
+                    </div>
                     <!-- Row 9: Action Buttons (Aligned Right) -->
                     <div class="col-span-2 mt-6 dont-show-in-view">
                         <button type="button" onclick="closeModal()" class="px-4 py-2 w-full bg-gray-200 text-gray-700 rounded font-rajdhani font-semibold">Abbrechen</button>
