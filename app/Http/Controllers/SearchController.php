@@ -47,7 +47,7 @@ class SearchController extends Controller
     public function loadMore(Request $request)
     {
         $perPage = 12; 
-        $results = Company::select(['firmen_id','anrede', 'webseite', 'firmenname', 'vorname', 'nachname', 'id', 'jobtitel', 'hausnummer', 'strasse', 'ort', 'plz', 'land','telefonnummer']) 
+        $results = Company::select(['firmen_id','anrede', 'webseite', 'firmenname', 'vorname', 'nachname', 'id', 'jobtitel', 'hausnummer', 'strasse', 'ort', 'plz', 'land','telefonnummer','branche_hauptkategorie']) 
                    ->paginate($perPage);
 
         return response()->json($results);
