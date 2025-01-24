@@ -366,38 +366,38 @@ class CompanyController extends Controller
     //                 $htmlContent = preg_replace('/H\d:\s*/i', '', $htmlContent);
     //             }
 
-    //             $data = [
-    //                 'title' => $row[$columnMap['Titel']] ?? null,
-    //                 'anrede' => $row[$columnMap['Anrede']] ?? null,
-    //                 'vorname' => $row[$columnMap['Vorname']] ?? null,
-    //                 'nachname' => $row[$columnMap['Nachname']] ?? null,
-    //                 'firmen_id' => $row[$columnMap['Firmen-ID']] ?? null,
-    //                 'firmenname' => $row[$columnMap['Firmenname']] ?? null,
-    //                 'jobtitel' => $row[$columnMap['Jobtitel']] ?? null,
-    //                 'webseite' => $row[$columnMap['Webseite']] ?? null,
-    //                 'email_adresse' => $row[$columnMap['E-Mail-Adresse']] ?? null,
-    //                 'strasse' => $row[$columnMap['Straße']] ?? null,
-    //                 'hausnummer' => $row[$columnMap['Hausnummer']] ?? null,
-    //                 'plz' => $row[$columnMap['PLZ']] ?? null,
-    //                 'ort' => $row[$columnMap['Ort']] ?? null,
-    //                 'land' => $row[$columnMap['Land']] ?? null,
-    //                 'cid' => $row[$columnMap['ID']] ?? null,
-    //                 'telefonnummer' => $row[$columnMap['Telefonnummer']] ?? null,
-    //                 'telefonnummer_firma' => $row[$columnMap['Telefonnummer (Firma)']] ?? null,
-    //                 'email_adresse_firma' => $row[$columnMap['E-Mail-Adresse (Firma)']] ?? null,
-    //                 'linkedin_account_firma' => $row[$columnMap['LinkedIn Account (Firma)']] ?? null,
-    //                 'nace_code_ebene_1' => $row[$columnMap['NACE-Code (Ebene 1)']] ?? null,
-    //                 'nace_code_ebene_2' => $row[$columnMap['NACE-Code (Ebene 2)']] ?? null,
-    //                 'beschreibung_nace_code_ebene_2' => $row[$columnMap['Beschreibung NACE-Code (Ebene 2)']] ?? null,
-    //                 'wz_code' => $row[$columnMap['WZ-Code']] ?? null,
-    //                 'beschreibung_wz_code' => $row[$columnMap['Beschreibung WZ-Code']] ?? null,
-    //                 'branche_hauptkategorie' => $row[$columnMap['Branche (Hauptkategorie)']] ?? null,
-    //                 'branche_unterkategorie' => $row[$columnMap['Branche (Unterkategorie)']] ?? null,
-    //                 'other_sources' => $row[$columnMap['Weitere Quellen']] ?? null,
-    //                 'meta_title' => $metaTitle,
-    //                 'meta_description' => $metaDescription,
-    //                 'html_content' => $htmlContent
-    //             ];
+                // $data = [
+                //     'title' => $row[$columnMap['Titel']] ?? null,
+                //     'anrede' => $row[$columnMap['Anrede']] ?? null,
+                //     'vorname' => $row[$columnMap['Vorname']] ?? null,
+                //     'nachname' => $row[$columnMap['Nachname']] ?? null,
+                //     'firmen_id' => $row[$columnMap['Firmen-ID']] ?? null,
+                //     'firmenname' => $row[$columnMap['Firmenname']] ?? null,
+                //     'jobtitel' => $row[$columnMap['Jobtitel']] ?? null,
+                //     'webseite' => $row[$columnMap['Webseite']] ?? null,
+                //     'email_adresse' => $row[$columnMap['E-Mail-Adresse']] ?? null,
+                //     'strasse' => $row[$columnMap['Straße']] ?? null,
+                //     'hausnummer' => $row[$columnMap['Hausnummer']] ?? null,
+                //     'plz' => $row[$columnMap['PLZ']] ?? null,
+                //     'ort' => $row[$columnMap['Ort']] ?? null,
+                //     'land' => $row[$columnMap['Land']] ?? null,
+                //     'cid' => $row[$columnMap['ID']] ?? null,
+                //     'telefonnummer' => $row[$columnMap['Telefonnummer']] ?? null,
+                //     'telefonnummer_firma' => $row[$columnMap['Telefonnummer (Firma)']] ?? null,
+                //     'email_adresse_firma' => $row[$columnMap['E-Mail-Adresse (Firma)']] ?? null,
+                //     'linkedin_account_firma' => $row[$columnMap['LinkedIn Account (Firma)']] ?? null,
+                //     'nace_code_ebene_1' => $row[$columnMap['NACE-Code (Ebene 1)']] ?? null,
+                //     'nace_code_ebene_2' => $row[$columnMap['NACE-Code (Ebene 2)']] ?? null,
+                //     'beschreibung_nace_code_ebene_2' => $row[$columnMap['Beschreibung NACE-Code (Ebene 2)']] ?? null,
+                //     'wz_code' => $row[$columnMap['WZ-Code']] ?? null,
+                //     'beschreibung_wz_code' => $row[$columnMap['Beschreibung WZ-Code']] ?? null,
+                //     'branche_hauptkategorie' => $row[$columnMap['Branche (Hauptkategorie)']] ?? null,
+                //     'branche_unterkategorie' => $row[$columnMap['Branche (Unterkategorie)']] ?? null,
+                //     'other_sources' => $row[$columnMap['Weitere Quellen']] ?? null,
+                //     'meta_title' => $metaTitle,
+                //     'meta_description' => $metaDescription,
+                //     'html_content' => $htmlContent
+                // ];
     //             Company::updateOrCreate(['firmen_id' => $data['firmen_id']], $data);
     //         }
 
@@ -480,42 +480,124 @@ class CompanyController extends Controller
                     foreach ($lines as $line) {
                         $original = trim($line);
                         if ($original === '') {
-                            continue;
+                            continue; 
                         }
 
+                        // if (preg_match('/^#{3}\s+(.*)/', $original, $m)) {
+                        //     $htmlLines[] = "<h3>".trim($m[1])."</h3>";
+                        //     continue;
+                        // }
+
+                        // if (preg_match('/^#{2}\s+(.*)/', $original, $m)) {
+                        //     $htmlLines[] = "<h2>".trim($m[1])."</h2>";
+                        //     continue;
+                        // }
+
+                        // if (preg_match('/^#\s+(.*)/', $original, $m)) {
+                        //     $htmlLines[] = "<h1>".trim($m[1])."</h1>";
+                        //     continue;
+                        // }
+
+                        // if (preg_match('/^H1:\s*(.*)/i', $original, $m)) {
+                        //     $htmlLines[] = "<h1>".trim($m[1])."</h1>";
+                        //     continue;
+                        // }
+
+                        // if (preg_match('/^H2:\s*(.*)/i', $original, $m)) {
+                        //     $htmlLines[] = "<h2>".trim($m[1])."</h2>";
+                        //     continue;
+                        // }
+
+                        // if (preg_match('/^H3:\s*(.*)/i', $original, $m)) {
+                        //     $htmlLines[] = "<h3>".trim($m[1])."</h3>";
+                        //     continue;
+                        // }
+
+                        if (preg_match('/^H1:\*\*\s*(.*)/i', $original, $m)) {
+                            $htmlLines[] = "<h1>" . trim($m[1]) . "</h1>";
+                            continue;
+                        }
+    
+                        if (preg_match('/^H2:\*\*\s*(.*)/i', $original, $m)) {
+                            $htmlLines[] = "<h2>" . trim($m[1]) . "</h2>";
+                            continue;
+                        }
+    
+                        if (preg_match('/^H3:\*\*\s*(.*)/i', $original, $m)) {
+                            $htmlLines[] = "<h3>" . trim($m[1]) . "</h3>";
+                            continue;
+                        }
+    
+                        // Check for other heading patterns
                         if (preg_match('/^#{3}\s+(.*)/', $original, $m)) {
                             $htmlLines[] = "<h3>" . trim($m[1]) . "</h3>";
                             continue;
                         }
-
+    
                         if (preg_match('/^#{2}\s+(.*)/', $original, $m)) {
                             $htmlLines[] = "<h2>" . trim($m[1]) . "</h2>";
                             continue;
                         }
-
+    
                         if (preg_match('/^#\s+(.*)/', $original, $m)) {
                             $htmlLines[] = "<h1>" . trim($m[1]) . "</h1>";
                             continue;
                         }
+    
+                        // Handle bold formatting
+                        if (preg_match('/\*\*(.*?)\*\*/', $original)) {
+                            $original = preg_replace('/\*\*(.*?)\*\*/', '<b>$1</b>', $original);
+                        }
 
                         $lineNoStars = preg_replace('/^\*+\s*/', '', $original);
+
                         if ($lineNoStars !== $original) {
                             $htmlLines[] = "<p>" . trim($lineNoStars) . "</p>";
                             continue;
                         }
 
-                        $htmlLines[] = "<p>" . $original . "</p>";
+                        $htmlLines[] = "<p>".$original."</p>";
                     }
+
+                    // foreach ($lines as $line) {
+                    //     $original = trim($line);
+                    //     if ($original === '') {
+                    //         continue;
+                    //     }
+
+                    //     if (preg_match('/^#{3}\s+(.*)/', $original, $m)) {
+                    //         $htmlLines[] = "<h3>" . trim($m[1]) . "</h3>";
+                    //         continue;
+                    //     }
+
+                    //     if (preg_match('/^#{2}\s+(.*)/', $original, $m)) {
+                    //         $htmlLines[] = "<h2>" . trim($m[1]) . "</h2>";
+                    //         continue;
+                    //     }
+
+                    //     if (preg_match('/^#\s+(.*)/', $original, $m)) {
+                    //         $htmlLines[] = "<h1>" . trim($m[1]) . "</h1>";
+                    //         continue;
+                    //     }
+
+                    //     $lineNoStars = preg_replace('/^\*+\s*/', '', $original);
+                    //     if ($lineNoStars !== $original) {
+                    //         $htmlLines[] = "<p>" . trim($lineNoStars) . "</p>";
+                    //         continue;
+                    //     }
+
+                    //     $htmlLines[] = "<p>" . $original . "</p>";
+                    // }
 
                     $htmlContent = implode("\n", $htmlLines);
                 }
 
                 $rowsToInsert[] = [
-                    'firmen_id' => $row[$columnMap['Firmen-ID']] ?? null,
                     'title' => $row[$columnMap['Titel']] ?? null,
                     'anrede' => $row[$columnMap['Anrede']] ?? null,
                     'vorname' => $row[$columnMap['Vorname']] ?? null,
                     'nachname' => $row[$columnMap['Nachname']] ?? null,
+                    'firmen_id' => $row[$columnMap['Firmen-ID']] ?? null,
                     'firmenname' => $row[$columnMap['Firmenname']] ?? null,
                     'jobtitel' => $row[$columnMap['Jobtitel']] ?? null,
                     'webseite' => $row[$columnMap['Webseite']] ?? null,
@@ -524,11 +606,20 @@ class CompanyController extends Controller
                     'hausnummer' => $row[$columnMap['Hausnummer']] ?? null,
                     'plz' => $row[$columnMap['PLZ']] ?? null,
                     'ort' => $row[$columnMap['Ort']] ?? null,
+                    'cid' => $row[$columnMap['ID']] ?? null,
                     'land' => $row[$columnMap['Land']] ?? null,
                     'telefonnummer' => $row[$columnMap['Telefonnummer']] ?? null,
                     'telefonnummer_firma' => $row[$columnMap['Telefonnummer (Firma)']] ?? null,
                     'email_adresse_firma' => $row[$columnMap['E-Mail-Adresse (Firma)']] ?? null,
                     'linkedin_account_firma' => $row[$columnMap['LinkedIn Account (Firma)']] ?? null,
+                    'nace_code_ebene_1' => $row[$columnMap['NACE-Code (Ebene 1)']] ?? null,
+                    'nace_code_ebene_2' => $row[$columnMap['NACE-Code (Ebene 2)']] ?? null,
+                    'beschreibung_nace_code_ebene_2' => $row[$columnMap['Beschreibung NACE-Code (Ebene 2)']] ?? null,
+                    'wz_code' => $row[$columnMap['WZ-Code']] ?? null,
+                    'beschreibung_wz_code' => $row[$columnMap['Beschreibung WZ-Code']] ?? null,
+                    'branche_hauptkategorie' => $row[$columnMap['Branche (Hauptkategorie)']] ?? null,
+                    'branche_unterkategorie' => $row[$columnMap['Branche (Unterkategorie)']] ?? null,
+                    'other_sources' => $row[$columnMap['Weitere Quellen']] ?? null,
                     'meta_title' => $metaTitle,
                     'meta_description' => $metaDescription,
                     'html_content' => $htmlContent
@@ -538,8 +629,8 @@ class CompanyController extends Controller
             // Perform bulk upsert
             Company::upsert($rowsToInsert, ['firmen_id'], [
                 'title', 'anrede', 'vorname', 'nachname', 'firmenname', 'jobtitel', 'webseite',
-                'email_adresse', 'strasse', 'hausnummer', 'plz', 'ort', 'land', 'telefonnummer',
-                'telefonnummer_firma', 'email_adresse_firma', 'linkedin_account_firma', 'meta_title',
+                'email_adresse', 'strasse', 'hausnummer', 'plz', 'ort', 'cid', 'land', 'telefonnummer',
+                'telefonnummer_firma', 'email_adresse_firma', 'linkedin_account_firma', 'nace_code_ebene_1', 'nace_code_ebene_2', 'beschreibung_nace_code_ebene_2', 'wz_code', 'beschreibung_wz_code','branche_hauptkategorie','branche_unterkategorie','other_sources', 'meta_title',
                 'meta_description', 'html_content'
             ]);
         });
