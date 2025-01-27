@@ -32,11 +32,11 @@ class SearchController extends Controller
         $cacheKey = 'details_' . $id;
         $details = Cache::remember($cacheKey, 60, function () use ($id) {
             $explode = explode('_', $id);
-            return Company::where('anrede', '=', $explode[0])
-                            ->where('vorname', '=', $explode[1])
-                            ->where('nachname', '=', $explode[2])
+            return Company::where('vorname', '=', $explode[0])
+                            ->where('nachname', '=', $explode[1])
                             ->first() ?? [];
         });
+
         if (!$details) {
             return response()->json(['message' => 'Not found'], 404);
         }
