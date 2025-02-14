@@ -33,6 +33,8 @@ class SearchController extends Controller
         
         $details = Cache::remember($cacheKey, 60, function () use ($id) {
             $explode = explode('_', $id);
+            print_r($explode);
+            die;
             $firmenname = str_replace('_', ' ', $explode[2]);
             return Company::where('vorname', '=', $explode[0])
                             ->where('nachname', '=', $explode[1])
