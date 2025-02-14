@@ -34,6 +34,7 @@ class SearchController extends Controller
             $explode = explode('_', $id);
             return Company::where('vorname', '=', $explode[0])
                             ->where('nachname', '=', $explode[1])
+                            ->where('firmenname', '=', $explode[2])
                             ->first() ?? [];
         });
 
