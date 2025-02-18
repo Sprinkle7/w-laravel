@@ -667,7 +667,7 @@
                     $('#location').text(` ${data.hausnummer} ${data.strasse} ${data.ort}, ${data.plz} ${data.land}`);
                     $('#firmaname').text(data.firmenname);
                     $('#description').text(data.beschreibung_nace_code_ebene_2);
-                    $('#submitbutton').append(`<button id="submitButton" onclick="deleteCompany(${data.id})" type="button" class="px-4 py-2 w-full bg-red text-white rounded font-rajdhani font-semibold">Löschen</button>`)
+                    $('#submitbutton').html(`<button id="submitButton" onclick="deleteCompany(${data.id})" type="button" class="px-4 py-2 w-full bg-red text-white rounded font-rajdhani font-semibold">Löschen</button>`)
                     openModalT();
                 },
                 error: function (xhr) {
