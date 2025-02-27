@@ -731,7 +731,7 @@
             if (confirm('Sind Sie sicher, dass Sie alle ausgewählten Datensätze löschen möchten?')) {
                 $.ajax({
                     url: '/companies/bulk-delete',
-                    type: 'DELETE',
+                    type: 'POST',
                     data: { 
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         ids: selectedIds 

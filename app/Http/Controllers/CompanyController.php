@@ -631,6 +631,7 @@ class CompanyController extends Controller
     public function bulkDelete(Request $request)
     {
         $ids = $request->input('ids');
+        dd($ids);
         if (!empty($ids)) {
             Company::whereIn('id', $ids)->delete();
             return response()->json(['message' => 'Ausgewählte Datensätze wurden erfolgreich gelöscht'], 200);
