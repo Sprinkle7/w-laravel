@@ -21,7 +21,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/companies', function () {
         return view('companies');
