@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
     Route::get('/get_companies', [CompanyController::class, 'index'])->name('companies.index');
     Route::get('/companies/{id}/edit', [CompanyController::class, 'edit'])->name('companies.edit');
-
+    Route::post('/companies/bulk-delete', [CompanyController::class, 'bulkDelete'])->name('companies.bulk-delete');
 });
 
 

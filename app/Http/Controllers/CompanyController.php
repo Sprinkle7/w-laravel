@@ -44,7 +44,7 @@ class CompanyController extends Controller
             // Format data for DataTables
             $formattedData = $companies->map(function ($company, $index) use ($start) {
                 return [
-                    'checkbox' => '<input type="checkbox" class="form-checkbox">',
+                    'checkbox' => '<input type="checkbox" value="' . $company->id . '" class="form-checkbox">',
                     'id' => "<span class='text-sm font-rajdhani'>" . ($start + $index + 1) . "</span>",
                     'name' => "<span class='text-sm font-rajdhani'>{$company->anrede} {$company->vorname} {$company->nachname}</span>",
                     'firmen_id' => "<span class='text-sm font-rajdhani uppercase'>{$company->firmen_id}</span>",
@@ -454,8 +454,6 @@ class CompanyController extends Controller
                 yield $row;
             }
         })->chunk(500)->each(function ($chunk) use ($columnMap) {
-            $rowsToInsert = []; // Collect rows for bulk upsert
-
             foreach ($chunk as $row) {
                 $rawContent = $row[$columnMap['KI TEXT']] ?? null;
                 $metaTitle = '';
@@ -482,36 +480,6 @@ class CompanyController extends Controller
                         if ($original === '') {
                             continue; 
                         }
-
-                        // if (preg_match('/^#{3}\s+(.*)/', $original, $m)) {
-                        //     $htmlLines[] = "<h3>".trim($m[1])."</h3>";
-                        //     continue;
-                        // }
-
-                        // if (preg_match('/^#{2}\s+(.*)/', $original, $m)) {
-                        //     $htmlLines[] = "<h2>".trim($m[1])."</h2>";
-                        //     continue;
-                        // }
-
-                        // if (preg_match('/^#\s+(.*)/', $original, $m)) {
-                        //     $htmlLines[] = "<h1>".trim($m[1])."</h1>";
-                        //     continue;
-                        // }
-
-                        // if (preg_match('/^H1:\s*(.*)/i', $original, $m)) {
-                        //     $htmlLines[] = "<h1>".trim($m[1])."</h1>";
-                        //     continue;
-                        // }
-
-                        // if (preg_match('/^H2:\s*(.*)/i', $original, $m)) {
-                        //     $htmlLines[] = "<h2>".trim($m[1])."</h2>";
-                        //     continue;
-                        // }
-
-                        // if (preg_match('/^H3:\s*(.*)/i', $original, $m)) {
-                        //     $htmlLines[] = "<h3>".trim($m[1])."</h3>";
-                        //     continue;
-                        // }
 
                         if (preg_match('/^H1:\*\*\s*(.*)/i', $original, $m)) {
                             $htmlLines[] = "<h1>" . trim($m[1]) . "</h1>";
@@ -559,40 +527,10 @@ class CompanyController extends Controller
                         $htmlLines[] = "<p>".$original."</p>";
                     }
 
-                    // foreach ($lines as $line) {
-                    //     $original = trim($line);
-                    //     if ($original === '') {
-                    //         continue;
-                    //     }
-
-                    //     if (preg_match('/^#{3}\s+(.*)/', $original, $m)) {
-                    //         $htmlLines[] = "<h3>" . trim($m[1]) . "</h3>";
-                    //         continue;
-                    //     }
-
-                    //     if (preg_match('/^#{2}\s+(.*)/', $original, $m)) {
-                    //         $htmlLines[] = "<h2>" . trim($m[1]) . "</h2>";
-                    //         continue;
-                    //     }
-
-                    //     if (preg_match('/^#\s+(.*)/', $original, $m)) {
-                    //         $htmlLines[] = "<h1>" . trim($m[1]) . "</h1>";
-                    //         continue;
-                    //     }
-
-                    //     $lineNoStars = preg_replace('/^\*+\s*/', '', $original);
-                    //     if ($lineNoStars !== $original) {
-                    //         $htmlLines[] = "<p>" . trim($lineNoStars) . "</p>";
-                    //         continue;
-                    //     }
-
-                    //     $htmlLines[] = "<p>" . $original . "</p>";
-                    // }
-
                     $htmlContent = implode("\n", $htmlLines);
                 }
 
-                $rowsToInsert[] = [
+                $rowsToInsert = [
                     'title' => $row[$columnMap['Titel']] ?? null,
                     'anrede' => $row[$columnMap['Anrede']] ?? null,
                     'vorname' => $row[$columnMap['Vorname']] ?? null,
@@ -624,15 +562,17 @@ class CompanyController extends Controller
                     'meta_description' => $metaDescription,
                     'html_content' => $htmlContent
                 ];
+
+                Company::updateOrCreate(['firmen_id' => $rowsToInsert['firmen_id']], $rowsToInsert);
             }
 
             // Perform bulk upsert
-            Company::upsert($rowsToInsert, ['firmen_id'], [
-                'title', 'anrede', 'vorname', 'nachname', 'firmenname', 'jobtitel', 'webseite',
-                'email_adresse', 'strasse', 'hausnummer', 'plz', 'ort', 'cid', 'land', 'telefonnummer',
-                'telefonnummer_firma', 'email_adresse_firma', 'linkedin_account_firma', 'nace_code_ebene_1', 'nace_code_ebene_2', 'beschreibung_nace_code_ebene_2', 'wz_code', 'beschreibung_wz_code','branche_hauptkategorie','branche_unterkategorie','other_sources', 'meta_title',
-                'meta_description', 'html_content'
-            ]);
+            // Company::upsert($rowsToInsert, ['firmen_id'], [
+            //     'title', 'anrede', 'vorname', 'nachname', 'firmenname', 'jobtitel', 'webseite',
+            //     'email_adresse', 'strasse', 'hausnummer', 'plz', 'ort', 'cid', 'land', 'telefonnummer',
+            //     'telefonnummer_firma', 'email_adresse_firma', 'linkedin_account_firma', 'nace_code_ebene_1', 'nace_code_ebene_2', 'beschreibung_nace_code_ebene_2', 'wz_code', 'beschreibung_wz_code','branche_hauptkategorie','branche_unterkategorie','other_sources', 'meta_title',
+            //     'meta_description', 'html_content'
+            // ]);
         });
 
         fclose($handle);
@@ -686,6 +626,18 @@ class CompanyController extends Controller
     {
         $company = Company::findOrFail($id);
         return response()->json($company);
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        if (!empty($ids)) {
+            Company::whereIn('id', $ids)->delete();
+            return response()->json(['message' => 'Ausgewählte Datensätze wurden erfolgreich gelöscht'], 200);
+        }
+
+        return response()->json(['message' => 'Keine IDs ausgewählt'], 400);
     }
 
 }

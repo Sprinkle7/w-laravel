@@ -667,7 +667,7 @@
                     $('#location').text(` ${data.hausnummer} ${data.strasse} ${data.ort}, ${data.plz} ${data.land}`);
                     $('#firmaname').text(data.firmenname);
                     $('#description').text(data.beschreibung_nace_code_ebene_2);
-                    $('#submitbutton').html(`<button id="submitButton" onclick="deleteCompany(${data.id})" type="button" class="px-4 py-2 w-full bg-red text-white rounded font-rajdhani font-semibold">Löschen</button>`)
+                    $('#submitbutton').html(`<button id="submitButton" onclick="deleteCompany(${data.id})" type="button" class="px-4 py-2 w-full bg-red text-white rounded font-rajdhani font-semibold">Löschen</button>`);
                     openModalT();
                 },
                 error: function (xhr) {
@@ -692,6 +692,60 @@
                     showMessage('Fehler beim Abrufen der Daten','Scheitern','error');
                 }
             });
+        });
+
+        // Select/Deselect all checkboxes
+        $('#companiesTable thead input[type="checkbox"]').on('click', function() {
+            const isChecked = $(this).prop('checked');
+            $('#companiesTable tbody input[type="checkbox"]').prop('checked', isChecked);
+            toggleBulkDeleteButton();
+        });
+
+        // Select/Deselect individual checkboxes
+        $('#companiesTable tbody').on('click', 'input[type="checkbox"]', function() {
+            const allChecked = $('#companiesTable tbody input[type="checkbox"]').length === $('#companiesTable tbody input[type="checkbox"]:checked').length;
+            $('#companiesTable thead input[type="checkbox"]').prop('checked', allChecked);
+            toggleBulkDeleteButton();
+        });
+
+        // Toggle bulk delete button
+        function toggleBulkDeleteButton() {
+            const anyChecked = $('#companiesTable tbody input[type="checkbox"]:checked').length > 0;
+            if (anyChecked) {
+                if (!$('#bulkDeleteBtn').length) {
+                    $('.dataTables_length').append('<button id="bulkDeleteBtn" class="ml-4 px-4 py-2 bg-red font-bold text-white rounded">Alle ausgewählten löschen</button>');
+                }
+            } else {
+                $('#bulkDeleteBtn').remove();
+            }
+        }
+
+        // Bulk delete confirmation and action
+        $(document).on('click', '#bulkDeleteBtn', function() {
+            const selectedIds = $('input[type="checkbox"]:checked').map(function() {
+                return $(this).val();
+            }).get();
+
+            if (selectedIds.length === 0) return;
+
+            if (confirm('Sind Sie sicher, dass Sie alle ausgewählten Datensätze löschen möchten?')) {
+                $.ajax({
+                    url: '/companies/bulk-delete',
+                    type: 'POST',
+                    data: { 
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        ids: selectedIds 
+                    },
+                    success: function() {
+                        $('#companiesTable thead input[type="checkbox"]').prop('checked', false);
+                        $('#companiesTable').DataTable().ajax.reload();
+                        showMessage('Ausgewählte Datensätze wurden erfolgreich gelöscht', 'Erfolg', 'success');
+                    },
+                    error: function() {
+                        showMessage('Fehler beim Löschen der ausgewählten Datensätze', 'Scheitern', 'error');
+                    }
+                });
+            }
         });
 
         $('#companyForm').on('submit', function (e) {
