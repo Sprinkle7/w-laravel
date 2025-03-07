@@ -16,9 +16,10 @@ class SearchController extends Controller
             return Company::select(['firmen_id', 'anrede', 'webseite', 'firmenname', 'vorname', 'nachname', 'id', 'jobtitel', 'hausnummer', 'strasse', 'ort', 'plz', 'land'])
                           ->where('firmenname', 'like', "%{$query}%")
                           ->orWhere('vorname', 'like', "%{$query}%")
+                          ->orWhere('full_name', 'like', "%{$query}%")
                           ->orWhere('nachname', 'like', "%{$query}%")
                           ->orWhere('jobtitel', 'like', "%{$query}%")
-                          ->orWhere('firmen_id', 'like', "%{$query}%")
+                           ->orWhere('firmen_id', 'like', "%{$query}%")
                           ->orWhere('webseite', 'like', "%{$query}%")
                           ->take(5) 
                           ->get();
