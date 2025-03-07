@@ -15,6 +15,7 @@ class Company extends Model
         'anrede',
         'vorname',
         'nachname',
+        'full_name',
         'firmen_id',
         'firmenname',
         'jobtitel',
