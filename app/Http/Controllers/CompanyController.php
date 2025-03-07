@@ -15,7 +15,7 @@ class CompanyController extends Controller
     * @return \Illuminate\Http\Response
     *
     */
-   
+
     public function index(Request $request)
     {
         try {
@@ -23,22 +23,21 @@ class CompanyController extends Controller
             // Apply search filtering
             if ($search = $request->input('search')['value'] ?? null) {
                 $query->where('firmenname', 'like', "%{$search}%")
-                      ->orWhere('vorname', 'like', "%{$search}%")
-                      ->orWhere('nachname', 'like', "%{$search}%")
-                      ->orWhere('full_name', 'like', "%{$search}%")
-                      ->orWhere('jobtitel', 'like', "%{$search}%")
-                      ->orWhere('firmen_id', 'like', "%{$search}%")
-                      ->orWhere('webseite', 'like', "%{$search}%");
+                ->orWhere('vorname', 'like', "%{$search}%")
+                ->orWhere('nachname', 'like', "%{$search}%")
+                ->orWhere('full_name', 'like', "%{$search}%")
+                ->orWhere('jobtitel', 'like', "%{$search}%")
+                ->orWhere('firmen_id', 'like', "%{$search}%")
+                ->orWhere('webseite', 'like', "%{$search}%");
             }
     
             $totalRecords = Company::count(); 
             $filteredRecords = $query->count();
-            // Apply pagination and ordering
             $start = $request->input('start', 0);
             $length = $request->input('length', 10);
             $query->skip($start)->take($length);
             $companies = $query->get();
-            // Format data for DataTables
+
             $formattedData = $companies->map(function ($company, $index) use ($start) {
                 return [
                     'checkbox' => '<input type="checkbox" value="' . $company->id . '" class="form-checkbox">',
@@ -98,7 +97,7 @@ class CompanyController extends Controller
 
         // Define the expected columns and their mappings
         $requiredColumns = [
-            'ID','Titel','Anrede', 'Vorname', 'Nachname', 'Firmen-ID', 'Firmenname', 'Jobtitel', 'Webseite',
+            'ID','Titel','chr', 'Vorname', 'Nachname', 'Firmen-ID', 'Firmenname', 'Jobtitel', 'Webseite',
             'E-Mail-Adresse', 'Straße', 'Hausnummer', 'PLZ', 'Ort', 'Land', 'Telefonnummer',
             'Telefonnummer (Firma)', 'E-Mail-Adresse (Firma)', 'LinkedIn Account (Firma)',
             'NACE-Code (Ebene 1)', 'NACE-Code (Ebene 2)', 'Beschreibung NACE-Code (Ebene 2)',
@@ -204,7 +203,7 @@ class CompanyController extends Controller
             // Prepare the data for either updating or creating the record
             $data = [
                 'title' => $row[$columnMap['Titel']] ?? null,
-                'anrede' => $row[$columnMap['Anrede']] ?? null,
+                'anrede' => $row[$columnMap['chr']] ?? null,
                 'vorname' => $row[$columnMap['Vorname']] ?? null,
                 'full_name' => $row[$columnMap['Vorname']]. ' ' .$row[$columnMap['Nachname']] ?? null,
                 'nachname' => $row[$columnMap['Nachname']] ?? null,
@@ -270,7 +269,7 @@ class CompanyController extends Controller
 
         // Define required columns
         $requiredColumns = [
-            'ID', 'Titel', 'Anrede', 'Vorname', 'Nachname', 'Firmen-ID', 'Firmenname', 'Jobtitel', 'Webseite',
+            'ID', 'Titel', 'chr', 'Vorname', 'Nachname', 'Firmen-ID', 'Firmenname', 'Jobtitel', 'Webseite',
             'E-Mail-Adresse', 'Straße', 'Hausnummer', 'PLZ', 'Ort', 'Land', 'Telefonnummer',
             'Telefonnummer (Firma)', 'E-Mail-Adresse (Firma)', 'LinkedIn Account (Firma)',
             'NACE-Code (Ebene 1)', 'NACE-Code (Ebene 2)', 'Beschreibung NACE-Code (Ebene 2)',
@@ -373,7 +372,7 @@ class CompanyController extends Controller
 
                 $rowsToInsert = [
                     'title' => $row[$columnMap['Titel']] ?? null,
-                    'anrede' => $row[$columnMap['Anrede']] ?? null,
+                    'anrede' => $row[$columnMap['chr']] ?? null,
                     'vorname' => $row[$columnMap['Vorname']] ?? null,
                     'nachname' => $row[$columnMap['Nachname']] ?? null,
                     'full_name' => $row[$columnMap['Vorname']]. ' ' .$row[$columnMap['Nachname']] ?? null,
