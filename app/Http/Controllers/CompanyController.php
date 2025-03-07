@@ -407,7 +407,7 @@ class CompanyController extends Controller
 
                 Company::updateOrCreate(['firmen_id' => $rowsToInsert['firmen_id']], $rowsToInsert);
             }
-
+// sdfsdf
             // Perform bulk upsert
             // Company::upsert($rowsToInsert, ['firmen_id'], [
             //     'title', 'anrede', 'vorname', 'nachname', 'firmenname', 'jobtitel', 'webseite',
