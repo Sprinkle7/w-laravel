@@ -29,11 +29,11 @@ class SearchController extends Controller
 
     public function details($id)
     {
+        $id = urldecode($id);
         $cacheKey = 'details_' . $id;
-        
         $details = Cache::remember($cacheKey, 60, function () use ($id) {
             $explode = explode('_', $id);
-            $firmenname = str_replace('_', ' ', $explode[2]);
+            // $firmenname = str_replace('_', ' ', $explode[2]);
             return Company::where('vorname', '=', $explode[0])
                             ->where('nachname', '=', $explode[1])
                             ->first() ?? [];
